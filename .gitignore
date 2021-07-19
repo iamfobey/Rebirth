@@ -1,0 +1,10 @@
+.vs/
+.git/
+bin/
+bin-int/
+Engine/credits.txt
+*.vcxproj.filters
+*.vcxproj.user
+imgui.ini
+log.txt
+save.data
