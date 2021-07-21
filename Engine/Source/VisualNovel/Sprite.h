@@ -20,9 +20,13 @@ namespace rb
 
 		void Render();
 		void Load(std::string imagePath);
+		void SetPosition(double x, double y);
 	private:
 		Texture mSpriteTexture;
 		Shader mSpriteShader;
+
+		double mPosX, mPosY;
+		double mVX, mVY;
 
 		unsigned int mVAO, mVBO, mEBO;
 	};

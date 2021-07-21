@@ -1,5 +1,7 @@
 #include "Sprite.h"
 
+#include <OpenGL/GLUtils.h>
+
 const char* vSpriteShaderCode = { "#version 330 core\n"
 		"layout(location = 0) in vec3 aPos;\n"
 		"layout(location = 2) in vec3 aColor;\n"
@@ -7,22 +9,21 @@ const char* vSpriteShaderCode = { "#version 330 core\n"
 		"\n"
 		"out vec2 TexCoord;\n"
 		"out vec3 ourColor;\n"
+		"uniform mat4 view;\n"
+		"uniform mat4 proj;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	gl_Position = vec4(aPos, 1.0);\n"
+		"	gl_Position = proj * view * vec4(aPos, 1.0);\n"
 		"	TexCoord = aTexCoord;\n"
 		"	ourColor = aColor;\n"
 		"}\n"
 };
 
-const char* fSpiteShaderCode = { "#version 330 core\n"
+const char* fSpriteShaderCode = { "#version 330 core\n"
 		"out vec4 FragColor;\n"
 		"in vec2 TexCoord;\n"
-		"\n"
 		"uniform sampler2D ourTexture;\n"
-		"uniform float alpha = 0.0;\n"
-		"\n"
 		"void main()\n"
 		"{\n"
 		"	vec4 texColor = texture(ourTexture, TexCoord);\n"
@@ -32,23 +33,23 @@ const char* fSpiteShaderCode = { "#version 330 core\n"
 		"}\n"
 };
 
+float spriteVertices[] = {
+			   -1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+				1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+			   -1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
+};
+
+unsigned int spriteindices[] = {
+			0, 1, 2,
+			2, 3, 0
+};
+
 namespace rb
 {
 	void Sprite::Init()
 	{
-		float spritevertices[] = {
-			   -0.45f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-				0.45f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.2f, 0.0f,
-				0.45f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.2f, 1.2f,
-			   -0.45f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.2f
-		};
-
-		unsigned int spriteindices[] = {
-					0, 1, 2,
-					2, 3, 0
-		};
-
-		mSpriteShader.load(vSpriteShaderCode, fSpiteShaderCode);
+		mSpriteShader.load(vSpriteShaderCode, fSpriteShaderCode);
 
 		glGenVertexArrays(1, &mVAO);
 		glGenBuffers(1, &mVBO);
@@ -57,10 +58,10 @@ namespace rb
 		glBindVertexArray(mVAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(spritevertices), spritevertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(spriteVertices), spriteVertices, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(spritevertices), spriteindices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(spriteVertices), spriteindices, GL_STATIC_DRAW);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -75,6 +76,13 @@ namespace rb
 	void Sprite::Render()
 	{
 		mSpriteShader.use();
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)900, 0.1f, 100.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "proj"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 		glBindVertexArray(mVAO);
 
@@ -85,5 +93,24 @@ namespace rb
 	void Sprite::Load(std::string imagePath)
 	{
 		mSpriteTexture.Load(imagePath);
+	}
+
+	void Sprite::SetPosition(double x, double y)
+	{
+		double oz;
+		glu::ClientToGL(x, y, &mPosX, &mPosY, &oz);
+
+		float vertices[] = {
+			   -1.0f + mPosX,  -1.0f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    0.0f, 0.0f,
+				1.0f + mPosX,  -1.0f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f,
+				1.0f + mPosX,   1.0f + mPosY, 0.0f,	 1.0f, 1.0f, 1.0f,    1.0f, 1.0f,
+			   -1.0f + mPosX,   1.0f + mPosY, 0.0f,	 1.0f, 1.0f, 1.0f,    0.0f, 1.0f
+		};
+
+		glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertices), spriteindices, GL_STATIC_DRAW);
 	}
 }

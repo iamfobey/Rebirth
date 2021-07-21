@@ -12,7 +12,7 @@ namespace rb
 	class Logger
 	{
 	public:
-		void Init();
+		void Init(std::string path);
 	};
 }
 

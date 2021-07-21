@@ -23,13 +23,18 @@ namespace rb
     class TextRenderer
     {
     public:
-        void Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath);
+        void Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size = 28);
         void Render(std::string text, unsigned int* VAO, unsigned int* VBO, int width, int height, float x, float y, float scale, glm::vec3 color);
 
         void setShader(Shader* shader) { mShader = shader; }
+
+        float xpostemp;
+        float ypostemp;
     private:
         std::map<char, Character> mCharacters;
         Shader* mShader;
+
+        bool mRenderBold = false;
     };
 }
 

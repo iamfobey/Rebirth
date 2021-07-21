@@ -15,7 +15,7 @@ namespace rb
 		~Text() {}
 
 		void Init(std::string fontPath, int width, int height);
-		void Render(std::string text, int width = -1, int height = -1, float x = 25.0f, float y = 25.0f, float scale = 1.0f, glm::vec3 color = glm::vec3(0.5, 0.8f, 0.2f));
+		void Render(std::string text, int width = -1, int height = -1, float x = 25.0f, float y = 25.0f, float scale = 1.0f, glm::vec3 color = glm::vec3(0.7f, 1.0f, 0.0f));
 	private:
 		unsigned int VAO, VBO, EBO;
 		Shader mTextShader;

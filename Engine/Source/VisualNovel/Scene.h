@@ -21,13 +21,15 @@ namespace rb
 
 		bool mDissolve = false;
 		bool mIsStart = true;
+
+		void Dissolve();
 	private:
 		Texture mSceneTexture;
-
 		Shader mSceneShader;
 
+		bool mD2 = false;
 		bool mIsLoaded = false;
-		
+
 		double mTextureAlpha = 0.0;
 
 		std::string mTexturePath;

@@ -31,7 +31,7 @@ unsigned int loadTexture(std::string path, int* width, int* height)
 	}
 	else
 	{
-		spdlog::get("log")->error("Failed to load texture in " + path + "path!");
+		spdlog::get("log")->error("Failed to load texture in " + path + " path!");
 		return 0;
 	}
 	stbi_image_free(data);

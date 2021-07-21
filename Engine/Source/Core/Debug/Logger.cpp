@@ -2,10 +2,11 @@
 
 namespace rb
 {
-    void Logger::Init()
+    void Logger::Init(std::string path)
     {
-        std::remove("log.txt");
-        auto logger = spdlog::basic_logger_mt("log", "log.txt");
+        std::string t = path + "log.txt";
+        std::remove(t.c_str());
+        auto logger = spdlog::basic_logger_mt("log", t);
 
         logger->set_pattern("%v");
 

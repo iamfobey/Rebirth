@@ -87,7 +87,7 @@ namespace rb
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		mNameText.Render(name, -1, -1, namePosX, namePosY, 1.0, glm::vec3(0.5f, 0.1f, 0.5f));
+		mNameText.Render(name, -1, -1, namePosX, namePosY, 1.0, glm::vec3(1.0f, 0.1f, 0.0f));
 		mText.Render(text, mBoxTexture.width, mBoxTexture.height, textPosX, textPosY);
 	}
 }

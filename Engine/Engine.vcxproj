@@ -188,10 +188,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\VisualNovel\Menu.cpp" />
     <ClCompile Include="Source\VisualNovel\Music.cpp" />
     <ClCompile Include="Source\OpenGL\GLUtils.cpp" />
     <ClCompile Include="Source\OpenGL\GLTexture.cpp" />
-    <ClCompile Include="Source\VisualNovel\Screens.cpp" />
     <ClCompile Include="Source\VisualNovel\DialogueBox.cpp" />
     <ClCompile Include="Source\VisualNovel\Scene.cpp" />
     <ClCompile Include="Source\Core\Application\Application.cpp" />
@@ -351,10 +351,10 @@
     <ClCompile Include="Source\Core\Debug\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\VisualNovel\Menu.h" />
     <ClInclude Include="Source\VisualNovel\Music.h" />
     <ClInclude Include="Source\OpenGL\GLUtils.h" />
     <ClInclude Include="Source\OpenGL\GLTexture.h" />
-    <ClInclude Include="Source\VisualNovel\Screens.h" />
     <ClInclude Include="Source\VisualNovel\DialogueBox.h" />
     <ClInclude Include="Source\VisualNovel\Scene.h" />
     <ClInclude Include="Source\Core\Application\Application.h" />

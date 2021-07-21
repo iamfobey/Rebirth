@@ -9,8 +9,8 @@ namespace rb
 {
 	class Music
 	{
-		float mVolume = 0.0f;
-		float mTempVolume = mVolume;
+		float mVolume = 0.5f;
+		float mTempVolume = 0.0f;
 	public:
 		Music() { SoundEngine = irrklang::createIrrKlangDevice(); }
 		~Music() { }
@@ -34,10 +34,10 @@ namespace rb
 		}
 
 		void update() {
-			if (SoundEngine->getSoundVolume() < 1.01f && isPlaying && !isStop)
+			if (SoundEngine->getSoundVolume() < 0.5f && isPlaying && !isStop)
 			{
 				SoundEngine->setSoundVolume(mTempVolume);
-				mTempVolume += 0.003f;
+				mTempVolume += 0.001f;
 			}
 
 			if (isStop && isPlaying)
@@ -50,7 +50,7 @@ namespace rb
 					return;
 				}
 				SoundEngine->setSoundVolume(mTempVolume);
-				mTempVolume -= 0.003f;
+				mTempVolume -= 0.001f;
 			}
 		}
 		irrklang::ISoundEngine* SoundEngine;

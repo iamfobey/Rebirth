@@ -1,22 +1,22 @@
 #include "Scene.h"
 
-const char* vSceneShaderCode = { "#version 330 core\n"
-		"layout(location = 0) in vec3 aPos;\n"
-		"layout(location = 1) in vec3 aColor;\n"
-		"layout(location = 2) in vec2 aTexCoord;\n"
-		"\n"
-		"out vec3 ourColor;\n"
-		"out vec2 TexCoord;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = vec4(aPos, 1.0);\n"
-		"	ourColor = aColor;\n"
-		"	TexCoord = aTexCoord;\n"
-		"}\n"
+const char* vImageShaderCode = {
+"#version 330 core\n"
+"layout(location = 0) in vec3 aPos;\n"
+"layout(location = 1) in vec3 aColor;\n"
+"layout(location = 2) in vec2 aTexCoord;\n"
+"out vec3 ourColor;\n"
+"out vec2 TexCoord;\n"
+"void main()\n"
+"{\n"
+ "	gl_Position = vec4(aPos, 1.0);\n"
+ "	ourColor = aColor;\n"
+ "	TexCoord = aTexCoord;\n"
+"}\n"
 };
 
-const char* fSceneShaderCode = { "#version 330 core\n"
+const char* fImageShaderCode = {
+"#version 330 core\n"
 "out vec4 FragColor;\n"
 "in vec3 ourColor;\n"
 "in vec2 TexCoord;\n"
@@ -46,7 +46,7 @@ namespace rb
 						2, 3, 0
 		};
 
-		mSceneShader.load(vSceneShaderCode, fSceneShaderCode);
+		mSceneShader.load(vImageShaderCode, fImageShaderCode);
 
 		glGenVertexArrays(1, &mVAO);
 		glGenBuffers(1, &mVBO);
@@ -74,7 +74,6 @@ namespace rb
 	{
 		while (mDissolve)
 		{
-
 			if (mIsStart)
 			{
 				mSceneTexture.Load(mTexturePath);
@@ -92,6 +91,21 @@ namespace rb
 					mTextureAlpha = 0.0;
 					mSceneTexture.Load(mTexturePath);
 					mIsLoaded = false;
+					break;
+				}
+				break;
+			}
+			else if (mD2)
+			{
+				mSceneShader.use();
+				glUniform1f(glGetUniformLocation(mSceneShader.ID, "alpha"), mTextureAlpha);
+				mTextureAlpha -= 0.015;
+
+				if (mTextureAlpha < 0.015)
+				{
+					mTextureAlpha = 0.0;
+					mD2 = false;
+					mDissolve = false;
 					break;
 				}
 				break;
@@ -124,6 +138,12 @@ namespace rb
 		mTexturePath = imagePath;
 		mDissolve = true;
 		mIsLoaded = true;
+	}
+
+	void Scene::Dissolve()
+	{
+		mDissolve = true;
+		mD2 = true;
 	}
 
 }

@@ -15,6 +15,7 @@ namespace rb
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 		std::string title = props->Title + " (Powered by Rebirth Engine)";
 
@@ -36,6 +37,9 @@ namespace rb
 			{
 				glViewport(0, 0, width, height);
 			});
+
 		glfwSwapInterval(1);
+
+		glfwSetInputMode(m_Window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
 	}
 }

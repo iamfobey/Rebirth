@@ -2,7 +2,7 @@
 
 namespace rb
 {
-    void TextRenderer::Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath)
+    void TextRenderer::Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size)
     {
         FT_Library ft;
 
@@ -18,7 +18,7 @@ namespace rb
             std::runtime_error("FreeType: failed to load font in " + fontPath + " path!");
         }
         else {
-            FT_Set_Pixel_Sizes(face, 0, 28);
+            FT_Set_Pixel_Sizes(face, 0, size);
 
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -131,9 +131,17 @@ namespace rb
         float xpos = 0.0f, ypos = 0.0f;
         float tempx = x;
         Character ch;
+        int i = 0;
         for (c = text.begin(); c != text.end(); c++)
         {
-            if ((width > 0 && height > 0) && (*c == ' ' && xpos * 1.46 >= width))
+            if ((width > 0 && height > 0) && (*c == ' ' && xpos * 1.48 >= width))
+            {
+                y -= 30.5;
+                x = tempx;
+                c++;
+            }
+
+            if (*c == '\n')
             {
                 y -= 30.5;
                 x = tempx;
@@ -168,8 +176,12 @@ namespace rb
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
             x += (ch.Advance >> 6) * scale-2;
+            i++;
         }
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        xpostemp = xpos;
+        ypostemp = ypos;
     }
 }

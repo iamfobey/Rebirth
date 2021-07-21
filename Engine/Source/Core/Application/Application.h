@@ -14,6 +14,7 @@
 #include <VisualNovel/DialogueBox.h>
 #include <VisualNovel/Sound.h>
 #include <VisualNovel/Music.h>
+#include <VisualNovel/Menu.h>
 
 #include <OpenGL/GLUtils.h>
 
@@ -25,20 +26,19 @@
 #include <map>
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void SaveProgress();
-void LoadProgress();
+bool SaveProgress(std::string path, int slot);
+bool LoadProgress(std::string path, int slot);
 
 enum CmdList
 {
 	TEXT,
-	IMAGE,
+	SCENE,
 	PLAYSOUND,
 	STOPSOUND,
 	PLAYMUSIC,
 	STOPMUSIC,
 	SHOWSPRITE,
-	HIDESPRITE,
-	TXT
+	HIDESPRITE
 };
 
 struct Cmds
@@ -48,6 +48,9 @@ struct Cmds
 
 	std::string who;
 	std::string what;
+
+	float posX = 800;
+	float poxY = 500;
 };
 
 struct RenderContent
@@ -78,68 +81,16 @@ namespace rb
 		virtual void Init() = 0;
 		virtual void Label() = 0;
 
-		void text(std::string who, std::string what) {
-			Cmds temp;
-			temp.command = CmdList::TEXT;
-			temp.who = who;
-			temp.what = what;
-			list.push_back(temp);
-		}
-
-		void text(std::string what) {
-			Cmds temp;
-			temp.command = CmdList::TEXT;
-			temp.what = what;
-			list.push_back(temp);
-		}
-
-		void scene(std::string path, bool dissolve = true) {
-			Cmds temp;
-			temp.command = CmdList::IMAGE;
-			temp.content = path;
-			list.push_back(temp);
-		}
-
-		void showSprite(std::string path) {
-			Cmds temp;
-			temp.command = CmdList::SHOWSPRITE;
-			temp.content = path;
-			list.push_back(temp);
-		}
-
-		void hideSprite(std::string path) {
-			Cmds temp;
-			temp.command = CmdList::HIDESPRITE;
-			temp.content = path;
-			list.push_back(temp);
-		}
-
-		void playMusic(std::string path) {
-			Cmds temp;
-			temp.command = CmdList::PLAYMUSIC;
-			temp.content = path;
-			list.push_back(temp);
-		}
-
-		void stopMusic() {
-			Cmds temp;
-			temp.command = CmdList::STOPMUSIC;
-			list.push_back(temp);
-		}
-
-		void playSound(std::string path) {
-			Cmds temp;
-			temp.command = CmdList::PLAYSOUND;
-			temp.content = path;
-			list.push_back(temp);
-		}
-
-		void stopSound() {
-			Cmds temp;
-			temp.command = CmdList::STOPSOUND;
-			list.push_back(temp);
-		}
-
+		void text(std::string who, std::string what);
+		void text(std::string what);
+		void scene(std::string path, bool dissolve = true);
+		void showSprite(std::string path,float x = 800.0f, float y = 550.0f);
+		void hideSprite(std::string path);
+		void playMusic(std::string path);
+		void stopMusic();
+		void playSound(std::string path);
+		void stopSound();
+	
 	private:
 		void AppInit();
 
@@ -149,6 +100,9 @@ namespace rb
 
 		void AppRender();
 		void AppClose();
+
+		void RenderMenu();
+		void RenderEscapeMenu();
 	private:
 		std::vector<Cmds> list;
 
@@ -164,10 +118,23 @@ namespace rb
 		Scene mMainScene;
 		DialogueBox mDialogueBox;
 
+		Sprite mEscSprite;
+		Sprite mSaveSprite;
+
 		Sound mSound;
 		Music mMusic;
 
+		Menu mMenu;
+
 		void NextStatement();
+
+		bool mDrawStartMenu = true;
+		bool mCloseWindow = false;
+		bool mStartGame = false;
+
+		int StartButton, LoadSaveButton, SaveButton, ExitButton, SaveSlotButton1, SaveSlotButton2, SaveSlotButton3, SaveSlotButton4, SaveSlotButton5, ReturnButton, ReturnButton2, ReturnButton3;
+
+		bool isLoadSave = false;
 
 		unsigned int VAO, VBO;
 	};
