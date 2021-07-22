@@ -1,5 +1,9 @@
 #include "WindowsWindow.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 namespace rb
 {
 	WindowsWindow::WindowsWindow(WindowProps* props)
@@ -33,8 +37,7 @@ namespace rb
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-			{
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
 				glViewport(0, 0, width, height);
 			});
 

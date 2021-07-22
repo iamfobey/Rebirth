@@ -38,7 +38,8 @@ enum CmdList
 	PLAYMUSIC,
 	STOPMUSIC,
 	SHOWSPRITE,
-	HIDESPRITE
+	HIDESPRITE,
+	CHANGEBOX
 };
 
 struct Cmds
@@ -84,12 +85,13 @@ namespace rb
 		void text(std::string who, std::string what);
 		void text(std::string what);
 		void scene(std::string path, bool dissolve = true);
-		void showSprite(std::string path,float x = 800.0f, float y = 550.0f);
+		void showSprite(std::string path,float x = 800.0f, float y = 500.0f);
 		void hideSprite(std::string path);
 		void playMusic(std::string path);
 		void stopMusic();
 		void playSound(std::string path);
 		void stopSound();
+		void changeBox(std::string path);
 	
 	private:
 		void AppInit();

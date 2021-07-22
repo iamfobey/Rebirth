@@ -134,7 +134,7 @@ namespace rb
         int i = 0;
         for (c = text.begin(); c != text.end(); c++)
         {
-            if ((width > 0 && height > 0) && (*c == ' ' && xpos * 1.48 >= width))
+            if ((width > 0 && height > 0) && (*c == ' ' && xpos * 1.47 >= width))
             {
                 y -= 30.5;
                 x = tempx;

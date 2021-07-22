@@ -19,6 +19,7 @@ namespace rb
 
 		void Init(std::string boxPath, std::string fontPath, int width, int height);
 		void Render(std::string name, std::string text);
+		void SetBox(std::string boxPath);
 
 		float posX = 25.0f, posY = 25.0f;
 		float namePosX = 25.0f, namePosY = 25.0f;

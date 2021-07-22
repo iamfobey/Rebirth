@@ -55,7 +55,7 @@ namespace rb
 
 	bool Menu::RenderTextButton(int id, std::string text, double x, double y, GLFWwindow* window)
 	{
-		int oldState = GLFW_RELEASE;
+		static int oldState = GLFW_RELEASE;
 		int newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (mPosMouseX >= x && mPosMouseX <= mTextButtonList[id].xpostemp && mPosMouseY >= mTextButtonList[id].ypostemp-8 && mPosMouseY <= mTextButtonList[id].ypostemp+20)
 		{

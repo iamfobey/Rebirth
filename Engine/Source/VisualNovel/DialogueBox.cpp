@@ -10,7 +10,7 @@ const char* vBoxShaderCode = { "#version 330 core\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"	gl_Position = vec4(aPos, 1.0);\n"
 		"	TexCoord = aTexCoord;\n"
 		"	ourColor = aColor;\n"
 		"}\n"
@@ -38,19 +38,19 @@ namespace rb
 	{
 		mBoxShader.load(vBoxShaderCode, fBoxShaderCode);
 		mBoxTexture.Load(boxPath);
-		mNameText.Init(fontPath, width, height);
-		mText.Init(fontPath, width, height);
+		mNameText.Init(fontPath, width, height, 32);
+		mText.Init(fontPath, width, height, 29);
 
 		float vertices[] = {
-			   -1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
-				1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-				1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-			   -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f
+			   -1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+				1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+			   -1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
 		};
 
 		unsigned int indices[] = {
-						0, 1, 2,
-						2, 3, 0
+					0, 1, 2,
+					2, 3, 0
 		};
 
 		glGenVertexArrays(1, &mVAO);
@@ -89,5 +89,10 @@ namespace rb
 
 		mNameText.Render(name, -1, -1, namePosX, namePosY, 1.0, glm::vec3(1.0f, 0.1f, 0.0f));
 		mText.Render(text, mBoxTexture.width, mBoxTexture.height, textPosX, textPosY);
+	}
+
+	void DialogueBox::SetBox(std::string boxPath)
+	{
+		mBoxTexture.Load(boxPath);
 	}
 }

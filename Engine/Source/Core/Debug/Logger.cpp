@@ -6,7 +6,7 @@ namespace rb
     {
         std::string t = path + "log.txt";
         std::remove(t.c_str());
-        auto logger = spdlog::basic_logger_mt("log", t);
+        auto logger = spdlog::basic_logger_mt("log", t.c_str());
 
         logger->set_pattern("%v");
 

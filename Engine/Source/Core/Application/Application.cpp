@@ -106,12 +106,12 @@ namespace rb
 		mMenu.Init(settings.gamePath + settings.fontPath, window.Width, window.Height);
 		mEscSprite.Init();
 		mEscSprite.Load(settings.gamePath + "images/ui/exitmenu.png");
-		mDialogueBox.Init(settings.gamePath + "images/ui/textbox.png", settings.gamePath + settings.fontPath, window.Width, window.Height);
-		mDialogueBox.namePosX = 217.0f;
-		mDialogueBox.namePosY = 198.0f;
+		mDialogueBox.Init(settings.gamePath + "images/ui/textbox_blood.png", settings.gamePath + settings.fontPath, window.Width, window.Height);
+		mDialogueBox.namePosX = 170.0f;
+		mDialogueBox.namePosY = 227.0f;
 
-		mDialogueBox.textPosX = 217.0f;
-		mDialogueBox.textPosY = 166.0f;
+		mDialogueBox.textPosX = 167.0f;
+		mDialogueBox.textPosY = 192.0f;
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -151,22 +151,8 @@ namespace rb
 
 	void Application::AppRender()
 	{
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-		double ox, oy, oz;
-
 		double xpos, ypos;
 
-		float vol = 0.5f;
-
-		/*glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
-			{
-				if (action == GLFW_PRESS & button == GLFW_MOUSE_BUTTON_LEFT)
-				{
-					NextState = true;
-				}
-			});*/
-		
 		glfwSetWindowFocusCallback(mWindow, [](GLFWwindow* window, int focused) {
 			if (focused)
 			{
@@ -174,7 +160,7 @@ namespace rb
 			}
 			else
 			{
-				glfwSwapInterval(-7);
+				glfwSwapInterval(-5);
 			}
 			});
 
@@ -215,7 +201,18 @@ namespace rb
 
 				if (RenderEscMenu)
 				{
+					glfwSetMouseButtonCallback(mWindow, nullptr);
 					RenderEscapeMenu();
+				}
+				else
+				{
+					glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
+						{
+							if (action == GLFW_PRESS & button == GLFW_MOUSE_BUTTON_LEFT)
+							{
+								NextState = true;
+							}
+						});
 				}
 
 				mMusic.update();
@@ -261,31 +258,46 @@ namespace rb
 
 					if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 757.0f, 550.0f, mWindow)) {
 						if (LoadProgress(settings.gamePath, 1))
-							mDrawStartMenu = false; break;
+						{
+							mDrawStartMenu = false;
+							break;
+						}
 					}
 
 
 					if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 757.0f, 510.0f, mWindow)) {
 						if (LoadProgress(settings.gamePath, 2))
-							mDrawStartMenu = false; break;
+						{
+							mDrawStartMenu = false;
+							break;
+						}
 					}
 
 
 					if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 757.0f, 470.0f, mWindow)) {
 						if (LoadProgress(settings.gamePath, 3))
-							mDrawStartMenu = false; break;
+						{
+							mDrawStartMenu = false;
+							break;
+						}
 					}
 
 
 					if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 757.0f, 430.0f, mWindow)) {
 						if (LoadProgress(settings.gamePath, 4))
-							mDrawStartMenu = false; break;
+						{
+							mDrawStartMenu = false;
+							break;
+						}
 					}
 
 
 					if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 757.0f, 390.0f, mWindow)) {
 						if (LoadProgress(settings.gamePath, 5))
-							mDrawStartMenu = false; break;
+						{
+							mDrawStartMenu = false;
+							break;
+						}
 					}
 
 					if (mMenu.RenderTextButton(ReturnButton, "Назад", 757.0f, 335.0f, mWindow)) {
@@ -451,6 +463,7 @@ namespace rb
 				bool soundStop = false;
 				IsLoadSave = false;
 				temp--;
+				bool t = false;
 				while (true)
 				{
 					if (temp < 0)
@@ -466,32 +479,39 @@ namespace rb
 						}
 						break;
 					case CmdList::SCENE:
-						mMainScene.Load(settings.gamePath + settings.imagePath + list[temp].content);
-						goto end;
+						if (!t)
+						{
+							mMainScene.Load(settings.gamePath + settings.imagePath + list[temp].content);
+							t = true;
+						}
 					case CmdList::SHOWSPRITE:
 					{
-						Sprite tempSprite;
-						tempSprite.Init();
-						if (!spritesToDelete.empty())
+						
+						if (!t)
 						{
-							for (uint32_t i = 0; i < spritesToDelete.size(); i++)
+							Sprite tempSprite;
+							tempSprite.Init();
+							if (!spritesToDelete.empty())
 							{
-								if (spritesToDelete[i] != list[temp].content)
+								for (uint32_t i = 0; i < spritesToDelete.size(); i++)
 								{
-									tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
-									tempSprite.SetPosition(list[it].posX, list[it].poxY);
-									mSprites[list[temp].content] = tempSprite;
-									break;
+									if (spritesToDelete[i] != list[temp].content)
+									{
+										tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
+										tempSprite.SetPosition(list[it].posX, list[it].poxY);
+										mSprites[list[temp].content] = tempSprite;
+										break;
+									}
 								}
 							}
+							else
+							{
+								tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
+								tempSprite.SetPosition(list[it].posX, list[it].poxY);
+								mSprites[list[temp].content] = tempSprite;
+							}
+							break;
 						}
-						else
-						{
-							tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
-							tempSprite.SetPosition(list[it].posX, list[it].poxY);
-							mSprites[list[temp].content] = tempSprite;
-						}
-						break;
 					}
 					case CmdList::HIDESPRITE:
 						spritesToDelete.push_back(list[temp].content);
@@ -514,6 +534,10 @@ namespace rb
 						break;
 					case CmdList::STOPMUSIC:
 						soundStop = true;
+						break;
+					case CmdList::CHANGEBOX:
+						mDialogueBox.SetBox(settings.gamePath + settings.imagePath + list[temp].content);
+						goto end;
 						break;
 					default:
 						break;
@@ -597,6 +621,11 @@ namespace rb
 			it++;
 			it2++;
 			goto start;
+		case CmdList::CHANGEBOX:
+			mDialogueBox.SetBox(settings.gamePath + settings.imagePath + list[it].content);
+			it++;
+			it2++;
+			goto start;
 		default:
 			break;
 		}
@@ -616,46 +645,42 @@ namespace rb
 
 	void Application::text(std::string who, std::string what)
 	{
-		list.push_back({ CmdList::TEXT, " ", who, what, 800, 550 });
+		list.push_back({ CmdList::TEXT, " ", who, what, 800, 500 });
 	}
-
 	void Application::text(std::string what)
 	{
-		list.push_back({ CmdList::TEXT,  " ",  " ", what, 800, 550 });
+		list.push_back({ CmdList::TEXT,  " ",  " ", what, 800, 500 });
 	}
-
 	void Application::scene(std::string path, bool dissolve)
 	{
-		list.push_back({ CmdList::SCENE, path,  " ",  " ", 800, 550 });
+		list.push_back({ CmdList::SCENE, path,  " ",  " ", 800, 500 });
 	}
-
 	void Application::showSprite(std::string path, float x, float y)
 	{
 		list.push_back({ CmdList::SHOWSPRITE, path,  " ",  " ", x, y });
 	}
-
 	void Application::hideSprite(std::string path) 
 	{
-		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 550 });
+		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 500 });
 	}
-
 	void Application::playMusic(std::string path)
 	{
-		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 800, 550 });
+		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 800, 500 });
 	}
-
 	void Application::stopMusic()
 	{
-		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 800, 550 });
+		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 800, 500 });
 	}
-
 	void Application::playSound(std::string path)
 	{
-		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " " });
+		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 800, 500 });
 	}
-
 	void Application::stopSound()
 	{
-		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " " });
+		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 800, 500 });
+	}
+	void Application::changeBox(std::string path)
+	{
+		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 800, 500 });
 	}
 }

@@ -26,7 +26,7 @@ const char* ffTextShaderCode = { "#version 330 core\n"
 
 namespace rb
 {
-	void Text::Init(std::string fontPath, int width, int height)
+	void Text::Init(std::string fontPath, int width, int height, int size)
 	{
 		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
 
@@ -36,7 +36,7 @@ namespace rb
 		glUniformMatrix4fv(glGetUniformLocation(mTextShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		mTextRenderer.setShader(&mTextShader);
-		mTextRenderer.Init(&VAO, &VBO, fontPath);
+		mTextRenderer.Init(&VAO, &VBO, fontPath, size);
 	}
 	void Text::Render(std::string text, int width, int height, float x, float y, float scale, glm::vec3 color)
 	{

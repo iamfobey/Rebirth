@@ -101,10 +101,10 @@ namespace rb
 		glu::ClientToGL(x, y, &mPosX, &mPosY, &oz);
 
 		float vertices[] = {
-			   -1.0f + mPosX,  -1.0f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    0.0f, 0.0f,
-				1.0f + mPosX,  -1.0f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f,
-				1.0f + mPosX,   1.0f + mPosY, 0.0f,	 1.0f, 1.0f, 1.0f,    1.0f, 1.0f,
-			   -1.0f + mPosX,   1.0f + mPosY, 0.0f,	 1.0f, 1.0f, 1.0f,    0.0f, 1.0f
+			   -1.05f + mPosX,  -1.15f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    0.0f, 0.0f,
+				1.05f + mPosX,  -1.15f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f,
+				1.05f + mPosX,   1.05f + mPosY, 0.0f,	   1.0f, 1.0f, 1.0f,    1.0f, 1.0f,
+			   -1.05f + mPosX,   1.05f + mPosY, 0.0f,	   1.0f, 1.0f, 1.0f,    0.0f, 1.0f
 		};
 
 		glBindBuffer(GL_ARRAY_BUFFER, mVBO);
