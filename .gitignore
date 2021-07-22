@@ -2,6 +2,7 @@
 .git/
 bin/
 bin-int/
+game/
 Engine/credits.txt
 *.vcxproj.filters
 *.vcxproj.user

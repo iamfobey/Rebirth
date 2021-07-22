@@ -25,6 +25,8 @@
 
 #include <map>
 
+#include <thread>
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 bool SaveProgress(std::string path, int slot);
 bool LoadProgress(std::string path, int slot);
