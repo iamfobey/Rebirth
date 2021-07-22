@@ -2,10 +2,7 @@
 .git/
 bin/
 bin-int/
-game/
+Engine/game/
 Engine/credits.txt
 *.vcxproj.filters
 *.vcxproj.user
-imgui.ini
-log.txt
-save.data

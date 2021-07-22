@@ -16,7 +16,7 @@ namespace rb
 		~Music() { }
 
 		void play(const char* path) {
-			mVolume = 0.0f;
+			mTempVolume = 0.0f;
 			SoundEngine->setSoundVolume(0);
 			SoundEngine->play2D(path, true);
 			isPlaying = true;
@@ -24,7 +24,6 @@ namespace rb
 
 		void stop() {
 			isStop = true;
-			SoundEngine->setSoundVolume(mVolume);
 		}
 
 		void SetVolume(float volume) {
@@ -34,7 +33,7 @@ namespace rb
 		}
 
 		void update() {
-			if (SoundEngine->getSoundVolume() < 0.5f && isPlaying && !isStop)
+			if (SoundEngine->getSoundVolume() < mVolume && isPlaying && !isStop)
 			{
 				SoundEngine->setSoundVolume(mTempVolume);
 				mTempVolume += 0.001f;
@@ -54,10 +53,8 @@ namespace rb
 			}
 		}
 		irrklang::ISoundEngine* SoundEngine;
-	private:
 		bool isStop = false;
 		bool isPlaying = false;
-
 	};
 }
 

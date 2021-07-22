@@ -445,6 +445,7 @@ int main()
 	catch (const std::exception& ex)
 	{
 		spdlog::get("log")->error(ex.what());
+		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;
 	}
 

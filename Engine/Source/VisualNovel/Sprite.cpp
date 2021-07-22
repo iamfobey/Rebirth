@@ -34,10 +34,10 @@ const char* fSpriteShaderCode = { "#version 330 core\n"
 };
 
 float spriteVertices[] = {
-			   -1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-				1.0f, -1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-				1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-			   -1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
+			   -0.85f, -1.15f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+				0.85f, -1.15f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+				0.85f,  0.85f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+			   -0.85f,  0.85f, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
 };
 
 unsigned int spriteindices[] = {
@@ -101,10 +101,10 @@ namespace rb
 		glu::ClientToGL(x, y, &mPosX, &mPosY, &oz);
 
 		float vertices[] = {
-			   -1.05f + mPosX,  -1.15f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    0.0f, 0.0f,
-				1.05f + mPosX,  -1.15f + mPosY, 0.0f,    1.0f, 1.0f, 1.0f,    1.0f, 0.0f,
-				1.05f + mPosX,   1.05f + mPosY, 0.0f,	   1.0f, 1.0f, 1.0f,    1.0f, 1.0f,
-			   -1.05f + mPosX,   1.05f + mPosY, 0.0f,	   1.0f, 1.0f, 1.0f,    0.0f, 1.0f
+			   -0.85f + mPosX, -1.3f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+				0.85f + mPosX, -1.3f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+				0.85f + mPosX,  0.85f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+			   -0.85f + mPosX,  0.85f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
 		};
 
 		glBindBuffer(GL_ARRAY_BUFFER, mVBO);

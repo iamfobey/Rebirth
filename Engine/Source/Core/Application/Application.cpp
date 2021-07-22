@@ -147,6 +147,9 @@ namespace rb
 		SaveSlotButton3 = mMenu.CreateTextButton();
 		SaveSlotButton4 = mMenu.CreateTextButton();
 		SaveSlotButton5 = mMenu.CreateTextButton();
+
+		mSound.SetVolume(0.25f);
+		mMusic.SetVolume(0.25f);
 	}
 
 	void Application::AppRender()
@@ -166,10 +169,14 @@ namespace rb
 
 		glm::ortho(0.0f, 1600.0f, 0.0f, 900.0f, 0.1f, 100.0f);
 
+		mMusic.play("game/sounds/music/AcousticGuitar1.ogg");
+
 		while (!glfwWindowShouldClose(mWindow))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 			glfwGetCursorPos(mWindow, &xpos, &ypos);
+
+			mMusic.update();
 
 			if (mDrawStartMenu)
 			{
@@ -214,8 +221,6 @@ namespace rb
 							}
 						});
 				}
-
-				mMusic.update();
 			}
 
 			glfwPollEvents();
@@ -229,6 +234,8 @@ namespace rb
 		glfwTerminate();
 	}
 
+	bool drawbuttons = true;
+
 	void Application::RenderMenu()
 	{
 	st: {}
@@ -237,88 +244,93 @@ namespace rb
 		glfwGetCursorPos(mWindow, &xpos, &ypos);
 
 		mMainScene.Render();
-
+		
 		if (!mMainScene.mDissolve && !mStartGame)
 		{
-			if (mMenu.RenderTextButton(StartButton, "Начать", 750.0f, 500.0f, mWindow))
+			if (drawbuttons)
 			{
-				mStartGame = true;
-				mMainScene.Dissolve();
-			}
-
-			if (mMenu.RenderTextButton(LoadSaveButton, "Загрузить", 730.0f, 440.0f, mWindow))
-			{
-				while (true)
+				if (mMenu.RenderTextButton(StartButton, "Начать", 750.0f, 500.0f, mWindow))
 				{
-					glClear(GL_COLOR_BUFFER_BIT);
-					glfwGetCursorPos(mWindow, &xpos, &ypos);
-					mMenu.SetMousePos(xpos, ypos);
-
-					mMainScene.Render();
-
-					if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 757.0f, 550.0f, mWindow)) {
-						if (LoadProgress(settings.gamePath, 1))
-						{
-							mDrawStartMenu = false;
-							break;
-						}
-					}
-
-
-					if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 757.0f, 510.0f, mWindow)) {
-						if (LoadProgress(settings.gamePath, 2))
-						{
-							mDrawStartMenu = false;
-							break;
-						}
-					}
-
-
-					if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 757.0f, 470.0f, mWindow)) {
-						if (LoadProgress(settings.gamePath, 3))
-						{
-							mDrawStartMenu = false;
-							break;
-						}
-					}
-
-
-					if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 757.0f, 430.0f, mWindow)) {
-						if (LoadProgress(settings.gamePath, 4))
-						{
-							mDrawStartMenu = false;
-							break;
-						}
-					}
-
-
-					if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 757.0f, 390.0f, mWindow)) {
-						if (LoadProgress(settings.gamePath, 5))
-						{
-							mDrawStartMenu = false;
-							break;
-						}
-					}
-
-					if (mMenu.RenderTextButton(ReturnButton, "Назад", 757.0f, 335.0f, mWindow)) {
-						goto st;
-					}
-
-					if (glfwWindowShouldClose(mWindow))
-					{
-						break;
-					}
-
-					glfwPollEvents();
-					glfwSwapBuffers(mWindow);
+					mStartGame = true;
+					mMusic.stop();
+					mMainScene.Dissolve();
 				}
-				glfwSetKeyCallback(mWindow, key_callback);
-			}
 
-			if (mMenu.RenderTextButton(ExitButton, "Выход", 755.0f, 380.0f, mWindow))
-			{
-				mCloseWindow = true;
-				mMainScene.Dissolve();
+				if (mMenu.RenderTextButton(LoadSaveButton, "Загрузить", 730.0f, 440.0f, mWindow))
+				{
+					while (true)
+					{
+						glClear(GL_COLOR_BUFFER_BIT);
+						glfwGetCursorPos(mWindow, &xpos, &ypos);
+						mMenu.SetMousePos(xpos, ypos);
+
+						mMainScene.Render();
+
+						if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 757.0f, 550.0f, mWindow)) {
+							if (LoadProgress(settings.gamePath, 1))
+							{
+								mDrawStartMenu = false;
+								break;
+							}
+						}
+
+
+						if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 757.0f, 510.0f, mWindow)) {
+							if (LoadProgress(settings.gamePath, 2))
+							{
+								mDrawStartMenu = false;
+								break;
+							}
+						}
+
+
+						if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 757.0f, 470.0f, mWindow)) {
+							if (LoadProgress(settings.gamePath, 3))
+							{
+								mDrawStartMenu = false;
+								break;
+							}
+						}
+
+
+						if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 757.0f, 430.0f, mWindow)) {
+							if (LoadProgress(settings.gamePath, 4))
+							{
+								mDrawStartMenu = false;
+								break;
+							}
+						}
+
+
+						if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 757.0f, 390.0f, mWindow)) {
+							if (LoadProgress(settings.gamePath, 5))
+							{
+								mDrawStartMenu = false;
+								break;
+							}
+						}
+
+						if (mMenu.RenderTextButton(ReturnButton, "Назад", 757.0f, 335.0f, mWindow)) {
+							goto st;
+						}
+
+						if (glfwWindowShouldClose(mWindow))
+						{
+							break;
+						}
+
+						glfwPollEvents();
+						glfwSwapBuffers(mWindow);
+					}
+					glfwSetKeyCallback(mWindow, key_callback);
+				}
+
+				if (mMenu.RenderTextButton(ExitButton, "Выход", 755.0f, 380.0f, mWindow))
+				{
+					mCloseWindow = true;
+					mMusic.stop();
+					mMainScene.Dissolve();
+				}
 			}
 		}
 
@@ -326,14 +338,22 @@ namespace rb
 
 		if (mCloseWindow && !mMainScene.mDissolve)
 		{
-			glfwSetWindowShouldClose(mWindow, true);
+			drawbuttons = false;
+			if (!mMusic.isPlaying)
+			{
+				glfwSetWindowShouldClose(mWindow, true);
+			}
 		}
 
 		if (mStartGame && !mMainScene.mDissolve)
 		{
-			mDrawStartMenu = false;
-			glfwSetKeyCallback(mWindow, key_callback);
-			NextStatement();
+			drawbuttons = false;
+			if (!mMusic.isPlaying)
+			{
+				mDrawStartMenu = false;
+				glfwSetKeyCallback(mWindow, key_callback);
+				NextStatement();
+			}
 		}
 	}
 
@@ -645,15 +665,15 @@ namespace rb
 
 	void Application::text(std::string who, std::string what)
 	{
-		list.push_back({ CmdList::TEXT, " ", who, what, 800, 500 });
+		list.push_back({ CmdList::TEXT, " ", who, what, 800, 450 });
 	}
 	void Application::text(std::string what)
 	{
-		list.push_back({ CmdList::TEXT,  " ",  " ", what, 800, 500 });
+		list.push_back({ CmdList::TEXT,  " ",  " ", what, 800, 450 });
 	}
 	void Application::scene(std::string path, bool dissolve)
 	{
-		list.push_back({ CmdList::SCENE, path,  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::SCENE, path,  " ",  " ", 800, 450 });
 	}
 	void Application::showSprite(std::string path, float x, float y)
 	{
@@ -661,26 +681,26 @@ namespace rb
 	}
 	void Application::hideSprite(std::string path) 
 	{
-		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 450 });
 	}
 	void Application::playMusic(std::string path)
 	{
-		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 800, 450 });
 	}
 	void Application::stopMusic()
 	{
-		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 800, 450 });
 	}
 	void Application::playSound(std::string path)
 	{
-		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 800, 450 });
 	}
 	void Application::stopSound()
 	{
-		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 800, 500 });
+		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 800, 450 });
 	}
 	void Application::changeBox(std::string path)
 	{
-		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 800, 500 });
+		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 800, 450 });
 	}
 }

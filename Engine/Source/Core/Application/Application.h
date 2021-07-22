@@ -53,7 +53,7 @@ struct Cmds
 	std::string what;
 
 	float posX = 800;
-	float poxY = 500;
+	float poxY = 450;
 };
 
 struct RenderContent
@@ -87,7 +87,7 @@ namespace rb
 		void text(std::string who, std::string what);
 		void text(std::string what);
 		void scene(std::string path, bool dissolve = true);
-		void showSprite(std::string path,float x = 800.0f, float y = 500.0f);
+		void showSprite(std::string path,float x = 800.0f, float y = 450.0f);
 		void hideSprite(std::string path);
 		void playMusic(std::string path);
 		void stopMusic();
