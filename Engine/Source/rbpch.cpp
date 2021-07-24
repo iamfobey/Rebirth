@@ -1,2 +1,1 @@
-unsigned int windowWidth;
-unsigned int windowHeight;
+int WNDwidth, WNDheight;

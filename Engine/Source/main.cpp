@@ -20,6 +20,7 @@ class App : public rb::Application
 		playMusic("music/Beginning.ogg");
 
 		text("Ишики", "Черт, кха… это было больно. И как же мне отсюда выбраться?");
+
 		text("Я начал ощупывать стены и пол. Вскоре нашел одну дверь, но она была закрыта.");
 		text("Ишики", "Должен же быть выход…");
 		text("Мысли", "ГДЕ! ГДЕ! ГДЕ ОН?!");
@@ -228,8 +229,8 @@ class App : public rb::Application
 		text("Обернувшись, я опять увидел Шизуку.");
 
 		hideSprite("sprites/ayako_unhappy1.png");
-		showSprite("sprites/ayako_unhappy1.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_unhappy1.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Аяко", "Я Аяко.");
 		text("Она резко изменилась в лице и вместо робкого и тихого голоса слышалась холодный, расчетливый и уверенный голос девушки.");
@@ -248,8 +249,8 @@ class App : public rb::Application
 		text("Ишики", "Вот и отлично, пойдем-те.");
 
 		scene("bg/street_morning.jpg");
-		showSprite("sprites/ayako_unhappy1.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_unhappy1.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Мы шли по пустой улице. Шизука ни на шаг не отходила от меня, но постоянно отвлекалась на всякую мелочь. То на падающие листья, то на товары в ларьках, то на облака. Но вот Аяко...");
 		text("Аяко была необычно грустной и задумчивой, она, если можно так сказать, сторонилась нас. Не знаю почему, но нужно было что-то предпринять, в этом я был точно уверен.");
@@ -262,8 +263,8 @@ class App : public rb::Application
 		text("Аяко", "Ну раз ты просишь.");
 
 		scene("bg/lakeside_daytime.jpg");
-		showSprite("sprites/ayako_unhappy1.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_unhappy1.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Спустя некоторое время мы пришли в парк.");
 		text("Прогулявшись вдоль моря, мы присели на лавку, откуда замечательно было видно заходящее солнце. Оно будто бы таяло в воде.");
@@ -350,8 +351,8 @@ class App : public rb::Application
 
 		text("Мысли", "Твою же… голова... раскалывается... где я? Тут темно и сыро...");
 
-		showSprite("sprites/ayako_normal.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_normal.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Шизука и Аяко", "ИШИКИ! Наконец-то ты проснулся.");
 		text("Ишики", "Аяко? Шизука? Откуда вы здесь? И вообще где мы? Как мы здесь оказались?");
@@ -373,8 +374,8 @@ class App : public rb::Application
 
 		text("Я взял из рук Шизуки телефон и начал копаться в нем. Но ничего не нашел кроме одного видео.");
 
-		showSprite("sprites/ayako_normal.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_normal.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Недолго думая я позвал Аяко и Шизуку и включил видео.");
 		text("Некто", "Добро пожаловать детишки. Наверное, вы хотите узнать кто я, где вы находитесь и почему именно вы. Я дам вам ответы, но сначала пройдите мою игру.");
@@ -396,8 +397,8 @@ class App : public rb::Application
 		text("Аяко", "Да.");
 
 		scene("bg/room1.jpg");
-		showSprite("sprites/ayako_normal.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_normal.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Она заметно приободрилась.");
 		text("Мысли", "Хорошо, теперь у нас по плану поиск ключей. Один был в нашей камере. Остальные неизвестно где. Нужно выйти и поискать.");
@@ -427,8 +428,8 @@ class App : public rb::Application
 		text("Шизука", "Но мы же здесь были.");
 
 		hideSprite("sprites/shizyka_normal1.png");
-		showSprite("sprites/ayako_unhappy1.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_unhappy1.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Аяко", "Да, но мне показалось подозрительным то, что только в этой комнате стоит телевизор с кассетником. Может быть, включим?");
 		text("Ишики", "А вдруг это ловушка?");
@@ -473,8 +474,8 @@ class App : public rb::Application
 		text("Аяко", "Нет, я не могу идти, мне нужно отдохнуть… извините меня.");
 
 		hideSprite("sprites/ayako_cry2.png");
-		showSprite("sprites/ayako_cry2.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_cry2.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Шизука", "Нет, все хорошо, ты нашла второй ключ, можем и отдохнуть.");
 		text("Ишики", "Да, верно, давайте зайдем в ту комнату, где мы проснулись. Аяко, залезай на спину.");
@@ -490,7 +491,7 @@ class App : public rb::Application
 
 		text("Шизука", "Эй, Ишики. В парке нас прервали. В общем, я хотела тебе кое-что сказать. И после всего что мы сегодня пережили, теперь во мне нет ни доли сомнения. Ишики, я люблю тебя.");
 		text("Ишики", "Шизука… нашла же ты время.");
-		text("Я поцеловал ее в щеку");
+		text("Я поцеловал ее в щеку.");
 		text("Шизука", "Спасибо.");
 
 		hideSprite("sprites/shizyka_smile.png");
@@ -502,7 +503,7 @@ class App : public rb::Application
 		text("Аяко", "Ребят, мне уже полегче, я могу идти.");
 		text("Ишики", "Замечательно, тогда отправляемся.");
 		text("Шизука", "Угу.");
-		text("Аяко", "Ишики, подойди ко мне");
+		text("Аяко", "Ишики, подойди ко мне.");
 		text("Ишики", "Хорошо, иди Шизука, мы тебя догоним, но будь осторожнее. Так, что такое, Аяко?");
 		text("Аяко", "Так ты теперь парень Шизуки, да?");
 		text("Ишики", "Надеюсь, что да.");
@@ -511,7 +512,11 @@ class App : public rb::Application
 		showSprite("sprites/ayako_normal.png");
 
 		text("Аяко погрустнела.");
-		text("Аяко", "Я поняла… пойдем дальше");
+
+		hideSprite("sprites/ayako_normal.png");
+		showSprite("sprites/ayako_sad.png");
+
+		text("Аяко", "Я поняла… пойдем дальше.");
 		text("Ишики", "Хорошо.");
 
 		scene("bg/room3.jpg");
@@ -523,8 +528,8 @@ class App : public rb::Application
 		text("Шизука", "Ребят, я нашла ключ, но… он привязан. Мне страшно.");
 
 		hideSprite("sprites/shizyka_normal1.png");
-		showSprite("sprites/ayako_normal.png", 300);
-		showSprite("sprites/shizyka_normal1.png", 1100);
+		showSprite("sprites/ayako_normal.png", -0.7);
+		showSprite("sprites/shizyka_normal1.png", 0.4);
 
 		text("Аяко", "Дергай быстрее его и беги к нам.");
 		text("Ишики", "Шизука, не стоит...");
@@ -609,6 +614,8 @@ class App : public rb::Application
 		text("Я чувствовал пьянящий запах чистого воздуха, шум листвы и журчание воды.");
 		text("Жаль, что радоваться осталось недолго. Мой разум пустел, а в глазах темнело.");
 		text("Ишики", "Шизука… я… иду к тебе…");
+
+		returnToMenu();
 	}
 };
 

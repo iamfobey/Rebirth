@@ -37,8 +37,8 @@ const char* vImageShaderCode = { "#version 330 core\n"
 		"\n"
 		"out vec2 TexCoord;\n"
 		"out vec3 ourColor;\n"
-	/*"uniform mat4 view;\n"
-	"uniform mat4 proj;\n"*/
+	//"uniform mat4 view;\n"
+	//"uniform mat4 proj;\n"
 	"\n"
 	"void main()\n"
 	"{\n"
@@ -61,11 +61,13 @@ const char* fImageShaderCode = { "#version 330 core\n"
 		"}\n"
 };
 
+extern int WNDwidth, WNDheight;
+
 namespace rb
 {
 	void Menu::Init(std::string fontPath, int width, int height)
 	{
-		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WNDwidth), 0.0f, static_cast<float>(WNDheight));
 
 		mTextShader.load(vvvTextShaderCode, fffTextShaderCode);
 
@@ -133,6 +135,11 @@ namespace rb
 
 	bool Menu::RenderTextButton(int id, std::string text, double x, double y, GLFWwindow* window)
 	{
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WNDwidth), 0.0f, static_cast<float>(WNDheight));
+
+		mTextShader.use();
+		glUniformMatrix4fv(glGetUniformLocation(mTextShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
 		static int oldState = GLFW_RELEASE;
 		int newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (mPosMouseX >= x && mPosMouseX <= mTextButtonList[id].xpostemp && mPosMouseY >= mTextButtonList[id].ypostemp - 8 && mPosMouseY <= mTextButtonList[id].ypostemp + 20)
@@ -161,10 +168,10 @@ namespace rb
 		mImageShaderList[id].use();
 		/*glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)900, 0.1f, 100.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));*/
+		projection = glm::perspective(glm::radians(45.0f), (float)WNDwidth / (float)WNDheight, 0.1f, 100.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.0f));
 
-		/*glUniformMatrix4fv(glGetUniformLocation(mImageShaderList[id].ID, "proj"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(mImageShaderList[id].ID, "proj"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(mImageShaderList[id].ID, "view"), 1, GL_FALSE, glm::value_ptr(view));*/
 
 		glBindVertexArray(mVAO);
@@ -175,13 +182,11 @@ namespace rb
 
 	void Menu::SetRenderImagePos(double x, double y)
 	{
-		double px, py, pz;
-		glu::ClientToGL(x, y, &px, &py, &pz);
 		float vertices[] = {
-				  -1.0f + px, -1.0f + py, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-				   1.0f + px, -1.0f + py, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-				   1.0f + px,  1.0f + py, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-				  -1.0f + px,  1.0f + py, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
+				  -1.0f + x, -1.0f + y, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+				   1.0f + x, -1.0f + y, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+				   1.0f + x,  1.0f + y, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+				  -1.0f + x,  1.0f + y, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
 		};
 
 		unsigned int indices[] = {
@@ -219,6 +224,6 @@ namespace rb
 	void Menu::SetMousePos(double x, double y)
 	{
 		mPosMouseX = x;
-		mPosMouseY = 900 - y;
+		mPosMouseY = WNDheight - y;
 	}
 }

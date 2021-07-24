@@ -28,6 +28,8 @@ namespace rb
 		double mPosX, mPosY;
 		double mVX, mVY;
 
+		glm::mat4 view = glm::mat4(1.0f);
+
 		unsigned int mVAO, mVBO, mEBO;
 	};
 }

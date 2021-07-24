@@ -45,7 +45,7 @@ unsigned int spriteindices[] = {
 			2, 3, 0
 };
 
-extern unsigned int windowWidth, windowHeight;
+extern int WNDwidth, WNDheight;
 
 namespace rb
 {
@@ -73,15 +73,17 @@ namespace rb
 
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
+
+		view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.75f));
 	}
 
 	void Sprite::Render()
 	{
 		mSpriteShader.use();
-		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)900, 0.1f, 100.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)WNDwidth / (float)WNDheight, 0.1f, 100.0f);
+		
 
 		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "proj"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -99,20 +101,7 @@ namespace rb
 
 	void Sprite::SetPosition(double x, double y)
 	{
-		double oz;
-		glu::ClientToGL(x, y, &mPosX, &mPosY, &oz);
-
-		float vertices[] = {
-			   -0.85f + mPosX, -1.3f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-				0.85f + mPosX, -1.3f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-				0.85f + mPosX,  0.85f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-			   -0.85f + mPosX,  0.85f + mPosY, 0.0f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
-		};
-
-		glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertices), spriteindices, GL_STATIC_DRAW);
+		view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(x, y, -2.75f));
 	}
 }

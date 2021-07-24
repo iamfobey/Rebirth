@@ -13,8 +13,6 @@
 #pragma comment (lib, "irrKlang.lib")
 #pragma comment (lib, "glu32.lib")
 
-
-
 #ifdef NDEBUG
 #pragma comment (linker, "/ENTRY:mainCRTStartup")
 #endif

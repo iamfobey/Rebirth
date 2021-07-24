@@ -24,11 +24,13 @@ const char* ffTextShaderCode = { "#version 330 core\n"
 "}\n"
 };
 
+extern int WNDwidth, WNDheight;
+
 namespace rb
 {
 	void Text::Init(std::string fontPath, int width, int height, int size)
 	{
-		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1600), 0.0f, static_cast<float>(900));
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
 
 		mTextShader.load(vvTextShaderCode, ffTextShaderCode);
 
@@ -40,6 +42,11 @@ namespace rb
 	}
 	void Text::Render(std::string text, int width, int height, float x, float y, float scale, glm::vec3 color)
 	{
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1600), 0.0f, static_cast<float>(900));
+
+		mTextShader.use();
+		glUniformMatrix4fv(glGetUniformLocation(mTextShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
 		mTextRenderer.Render(text, &VAO, &VBO, width, height, x, y, scale, color);
 	}
 }

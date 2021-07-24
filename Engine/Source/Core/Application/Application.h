@@ -43,7 +43,8 @@ enum CmdList
 	PLAYAMBIENCE,
 	STOPAMBIENCE,
 	CHANGEBOX,
-	CHANGEESCMENU
+	CHANGEESCMENU,
+	RETURNTOMENU
 };
 
 struct Cmds
@@ -54,8 +55,8 @@ struct Cmds
 	std::string who;
 	std::string what;
 
-	float posX = 800;
-	float poxY = 450;
+	float posX = 0.0f;
+	float poxY = 1.0f;
 };
 
 struct RenderContent
@@ -89,7 +90,7 @@ namespace rb
 		void text(std::string who, std::string what);
 		void text(std::string what);
 		void scene(std::string path, bool dissolve = true);
-		void showSprite(std::string path, float x = 800.0f, float y = 450.0f);
+		void showSprite(std::string path, float x = 0.0f, float y = 0.0f);
 		void hideSprite(std::string path);
 		void playMusic(std::string path);
 		void stopMusic();
@@ -99,6 +100,7 @@ namespace rb
 		void stopAmbience();
 		void changeBox(std::string path);
 		void changeESCMenu(std::string path);
+		void returnToMenu();
 
 	private:
 		void AppInit();
@@ -145,6 +147,13 @@ namespace rb
 		int StartButton, LoadSaveButton, SaveButton, ExitButton, SaveSlotButton1, SaveSlotButton2, SaveSlotButton3, SaveSlotButton4, SaveSlotButton5, ReturnButton, ReturnButton2, ReturnButton3, ESCImage;
 
 		bool isLoadSave = false;
+
+		float tx1 = 500.0f;
+		float ty1 = 1.0f;
+		float tx2 = 1.0f;
+		float ty2 = 1.0f;
+		float tx3 = 1.0f;
+		float ty3 = 1.0f;
 
 		unsigned int VAO, VBO;
 	};

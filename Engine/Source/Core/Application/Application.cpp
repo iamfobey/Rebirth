@@ -41,6 +41,8 @@ bool NextState = false;
 bool RenderEscMenu = false;
 bool renderButtons = true;
 
+extern int WNDwidth, WNDheight;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	switch (key)
@@ -69,6 +71,8 @@ bool SaveProgress(std::string path, int slot)
 
 	file << it;
 
+	file.close();
+
 	return true;
 }
 
@@ -84,6 +88,8 @@ bool LoadProgress(std::string path, int slot)
 	it = std::atoi(buff);
 	IsLoadSave = true;
 
+	file.close();
+
 	return true;
 }
 
@@ -98,6 +104,7 @@ namespace rb
 		AppRender();
 		AppClose();
 	}
+
 	void Application::AppInit()
 	{
 		mLogger.Init(settings.gamePath);
@@ -107,15 +114,16 @@ namespace rb
 		mEscSprite.Init();
 		mEscSprite.Load(settings.gamePath + "images/ui/exitmenu.png");
 		mDialogueBox.Init(settings.gamePath + "images/ui/textbox_blood.png", settings.gamePath + settings.fontPath, window.Width, window.Height);
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
 		mDialogueBox.namePosX = 170.0f;
 		mDialogueBox.namePosY = 227.0f;
 
 		mDialogueBox.textPosX = 167.0f;
 		mDialogueBox.textPosY = 192.0f;
-
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
@@ -161,14 +169,14 @@ namespace rb
 
 		while (!glfwWindowShouldClose(mWindow))
 		{
-			/*glm::ortho(0.0f, (float)1600, 0.0f, (float)900, 0.1f, 100.0f);
-			glViewport(0, 0, 1600, 900);*/
-
 			int w = 1600, h = 900;
 
 			glfwGetWindowSize(mWindow, &w, &h);
+
 			glViewport(0, 0, w, h);
-			glm::ortho(0.0f, (float)w, 0.0f, (float)h, 0.1f, 100.0f);
+
+			WNDwidth = w;
+			WNDheight = h;
 
 			glClear(GL_COLOR_BUFFER_BIT);
 			glfwGetCursorPos(mWindow, &xpos, &ypos);
@@ -220,27 +228,6 @@ namespace rb
 				}
 			}
 
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-
-			if (ImGui::Begin("Debug"))
-			{
-				double cx, cy;
-				double ox = 0, oy = 0, oz;
-				glfwGetCursorPos(mWindow, &cx, &cy);
-
-				glu::ClientToGL(cx, cy, &ox, &oy, &oz);
-
-				ImGui::Text("Cursor X: %.f", cx);
-				ImGui::Text("Cursor Y: %.f", cy);
-				ImGui::Text("OGL X: %f", ox);
-				ImGui::Text("OGL Y: %f", oy);
-			}
-
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 			glfwPollEvents();
 			glfwSwapBuffers(mWindow);
 		}
@@ -267,14 +254,14 @@ namespace rb
 		{
 			if (drawbuttons)
 			{
-				if (mMenu.RenderTextButton(StartButton, "Начать", 750.0f, 500.0f, mWindow))
+				if (mMenu.RenderTextButton(StartButton, "Начать", WNDwidth/2.135, WNDheight/1.835, mWindow))
 				{
 					mStartGame = true;
 					mMusic.stop();
 					mMainScene.Dissolve();
 				}
 
-				if (mMenu.RenderTextButton(LoadSaveButton, "Загрузить", 730.0f, 440.0f, mWindow))
+				if (mMenu.RenderTextButton(LoadSaveButton, "Загрузить", WNDwidth/2.2, WNDheight/2.05, mWindow))
 				{
 					while (true)
 					{
@@ -284,7 +271,7 @@ namespace rb
 
 						mMainScene.Render();
 
-						if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 752.0f, 550.0f, mWindow)) {
+						if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth/2.125, WNDheight/1.59, mWindow)) {
 							if (LoadProgress(settings.gamePath, 1))
 							{
 								mDrawStartMenu = false;
@@ -292,7 +279,7 @@ namespace rb
 							}
 						}
 
-						if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 752.0f, 510.0f, mWindow)) {
+						if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.125, WNDheight /1.7, mWindow)) {
 							if (LoadProgress(settings.gamePath, 2))
 							{
 								mDrawStartMenu = false;
@@ -300,7 +287,7 @@ namespace rb
 							}
 						}
 
-						if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 752.0f, 470.0f, mWindow)) {
+						if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.125, WNDheight / 1.83, mWindow)) {
 							if (LoadProgress(settings.gamePath, 3))
 							{
 								mDrawStartMenu = false;
@@ -308,7 +295,7 @@ namespace rb
 							}
 						}
 
-						if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 752.0f, 430.0f, mWindow)) {
+						if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.125, WNDheight / 1.99, mWindow)) {
 							if (LoadProgress(settings.gamePath, 4))
 							{
 								mDrawStartMenu = false;
@@ -316,7 +303,7 @@ namespace rb
 							}
 						}
 
-						if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 752.0f, 390.0f, mWindow)) {
+						if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.125, WNDheight / 2.19, mWindow)) {
 							if (LoadProgress(settings.gamePath, 5))
 							{
 								mDrawStartMenu = false;
@@ -324,7 +311,7 @@ namespace rb
 							}
 						}
 
-						if (mMenu.RenderTextButton(ReturnButton, "Назад", 757.0f, 335.0f, mWindow)) {
+						if (mMenu.RenderTextButton(ReturnButton, "Назад", WNDwidth/2.1, WNDheight/2.5, mWindow)) {
 							goto st;
 						}
 
@@ -340,7 +327,7 @@ namespace rb
 					glfwSetKeyCallback(mWindow, key_callback);
 				}
 
-				if (mMenu.RenderTextButton(ExitButton, "Выход", 755.0f, 380.0f, mWindow))
+				if (mMenu.RenderTextButton(ExitButton, "Выход", WNDwidth/2.115, WNDheight/2.325, mWindow))
 				{
 					mCloseWindow = true;
 					mMusic.stop();
@@ -367,6 +354,7 @@ namespace rb
 			{
 				mDrawStartMenu = false;
 				glfwSetKeyCallback(mWindow, key_callback);
+
 				NextStatement();
 			}
 		}
@@ -374,12 +362,12 @@ namespace rb
 
 	void Application::RenderEscapeMenu()
 	{
-		mMenu.SetRenderImagePos(805, 535);
+		mMenu.SetRenderImagePos(WNDwidth/119500.0f, -0.176);
 		mMenu.RenderImage(ESCImage);
 
 		if (renderButtons)
 		{
-			if (mMenu.RenderTextButton(LoadSaveButton, "Сохранить", 730.0f, 520.0f, mWindow))
+			if (mMenu.RenderTextButton(LoadSaveButton, "Сохранить", WNDwidth/2.19, WNDheight/1.73, mWindow))
 			{
 				renderButtons = false;
 				isLoadSave = false;
@@ -387,7 +375,7 @@ namespace rb
 				return;
 			}
 
-			if (mMenu.RenderTextButton(SaveButton, "Загрузить", 730.0f, 465.0f, mWindow))
+			if (mMenu.RenderTextButton(SaveButton, "Загрузить", WNDwidth/2.19, WNDheight / 1.94, mWindow))
 			{
 				renderButtons = false;
 				isLoadSave = true;
@@ -395,12 +383,12 @@ namespace rb
 				return;
 			}
 
-			if (mMenu.RenderTextButton(ReturnButton3, "Назад", 757.0f, 410.0f, mWindow))
+			if (mMenu.RenderTextButton(ReturnButton3, "Назад", WNDwidth/2.11, WNDheight / 2.21, mWindow))
 			{
 				RenderEscMenu = false;
 			}
 
-			if (mMenu.RenderTextButton(ExitButton, "Выйти", 757.0f, 355.0f, mWindow))
+			if (mMenu.RenderTextButton(ExitButton, "Выйти", WNDwidth/2.11, WNDheight/2.52, mWindow))
 			{
 				mMainScene.Dissolve();
 				mMusic.stop();
@@ -422,58 +410,58 @@ namespace rb
 		{
 			if (isLoadSave)
 			{
-				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 752.0f, 550.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth/ 2.12, WNDheight/1.64, mWindow)) {
 					if (LoadProgress(settings.gamePath, 1))
 						RenderEscMenu = false;
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 752.0f, 510.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.12, WNDheight / 1.78, mWindow)) {
 					if (LoadProgress(settings.gamePath, 2))
 						RenderEscMenu = false;
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 752.0f, 470.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.12, WNDheight / 1.96, mWindow)) {
 					if (LoadProgress(settings.gamePath, 3))
 						RenderEscMenu = false;
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 752.0f, 430.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.12, WNDheight / 2.17, mWindow)) {
 					if (LoadProgress(settings.gamePath, 4))
 						RenderEscMenu = false;
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 752.0f, 390.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.12, WNDheight / 2.41, mWindow)) {
 					if (LoadProgress(settings.gamePath, 5))
 						RenderEscMenu = false;
 				}
 
-				if (mMenu.RenderTextButton(ReturnButton, "Назад", 757.0f, 335.0f, mWindow)) {
+				if (mMenu.RenderTextButton(ReturnButton, "Назад", WNDwidth/2.11, WNDheight/2.75, mWindow)) {
 					renderButtons = true;
 				}
 			}
 			else
 			{
-				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", 752.0f, 550.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth / 2.12, WNDheight / 1.64, mWindow)) {
 					SaveProgress(settings.gamePath, 1);
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 752.0f, 510.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.12, WNDheight / 1.78, mWindow)) {
 					SaveProgress(settings.gamePath, 2);
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 752.0f, 470.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.12, WNDheight / 1.96, mWindow)) {
 					SaveProgress(settings.gamePath, 3);
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 752.0f, 430.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.12, WNDheight / 2.17, mWindow)) {
 					SaveProgress(settings.gamePath, 4);
 				}
 
-				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 752.0f, 390.0f, mWindow)) {
+				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.12, WNDheight / 2.41, mWindow)) {
 					SaveProgress(settings.gamePath, 5);
 				}
 
-				if (mMenu.RenderTextButton(ReturnButton2, "Назад", 757.0f, 335.0f, mWindow)) {
+				if (mMenu.RenderTextButton(ReturnButton2, "Назад", WNDwidth / 2.11, WNDheight / 2.75, mWindow)) {
 					renderButtons = true;
 				}
 			}
@@ -694,11 +682,22 @@ namespace rb
 			it++;
 			it2++;
 			goto start;
+		case CmdList::RETURNTOMENU:
+			mDrawStartMenu = true;
+			mStartGame = false;
+			drawbuttons = true;
+			it = 0;
+			it2 = 0;
+			mMainScene.Load(settings.gamePath + settings.imagePath + "ui/bloodsplat_big.png");
+			mMusic.play("game/sounds/music/Azimuth.ogg");
+			glfwSetMouseButtonCallback(mWindow, nullptr);
+			goto endsw;
 		default:
 			break;
 		}
 		it++;
 		it2++;
+	endsw: {}
 	}
 
 	void Application::InitWindow()
@@ -713,15 +712,15 @@ namespace rb
 
 	void Application::text(std::string who, std::string what)
 	{
-		list.push_back({ CmdList::TEXT, " ", who, what, 800, 450 });
+		list.push_back({ CmdList::TEXT, " ", who, what, 0.0f, 0.0f });
 	}
 	void Application::text(std::string what)
 	{
-		list.push_back({ CmdList::TEXT,  " ",  " ", what, 800, 450 });
+		list.push_back({ CmdList::TEXT,  " ",  " ", what, 0.0f, 0.0f });
 	}
 	void Application::scene(std::string path, bool dissolve)
 	{
-		list.push_back({ CmdList::SCENE, path,  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::SCENE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::showSprite(std::string path, float x, float y)
 	{
@@ -729,38 +728,42 @@ namespace rb
 	}
 	void Application::hideSprite(std::string path)
 	{
-		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playMusic(std::string path)
 	{
-		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopMusic()
 	{
-		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playSound(std::string path)
 	{
-		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopSound()
 	{
-		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playAmbience(std::string path)
 	{
-		list.push_back({ CmdList::PLAYAMBIENCE, path,  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::PLAYAMBIENCE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopAmbience()
 	{
-		list.push_back({ CmdList::STOPAMBIENCE,  " ",  " ",  " ", 800, 450 });
+		list.push_back({ CmdList::STOPAMBIENCE,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::changeBox(std::string path)
 	{
-		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 800, 450 });
+		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 0.0f, 0.0f });
 	}
 	void Application::changeESCMenu(std::string path)
 	{
-		list.push_back({ CmdList::CHANGEESCMENU, path, " ", " ", 800, 450 });
+		list.push_back({ CmdList::CHANGEESCMENU, path, " ", " ", 0.0f, 0.0f });
+	}
+	void Application::returnToMenu()
+	{
+		list.push_back({ CmdList::RETURNTOMENU, " ", " ", " ", 0.0f, 0.0f });
 	}
 }

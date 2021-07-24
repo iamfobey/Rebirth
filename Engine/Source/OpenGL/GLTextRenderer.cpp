@@ -1,5 +1,7 @@
 ﻿#include "GLTextRenderer.h"
 
+extern int WNDwidth, WNDheight;
+
 namespace rb
 {
 	void TextRenderer::Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size)
