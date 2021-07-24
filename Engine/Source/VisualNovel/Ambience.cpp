@@ -10,7 +10,6 @@ namespace rb
 	public:
 
 	private:
-
 	};
 }
 

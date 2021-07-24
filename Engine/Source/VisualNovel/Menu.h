@@ -21,10 +21,11 @@ namespace rb
 
 		int CreateTextButton();
 		int CreateImage(std::string path);
-		
+
 		bool RenderTextButton(int id, std::string text, double x, double y, GLFWwindow* window);
 		void RenderImage(int id);
 		void SetRenderImagePos(double x, double y);
+		void ChangeImage(int id, std::string path);
 
 		void SetMousePos(double x, double y);
 	private:

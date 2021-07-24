@@ -42,7 +42,8 @@ enum CmdList
 	HIDESPRITE,
 	PLAYAMBIENCE,
 	STOPAMBIENCE,
-	CHANGEBOX
+	CHANGEBOX,
+	CHANGEESCMENU
 };
 
 struct Cmds
@@ -88,7 +89,7 @@ namespace rb
 		void text(std::string who, std::string what);
 		void text(std::string what);
 		void scene(std::string path, bool dissolve = true);
-		void showSprite(std::string path,float x = 800.0f, float y = 450.0f);
+		void showSprite(std::string path, float x = 800.0f, float y = 450.0f);
 		void hideSprite(std::string path);
 		void playMusic(std::string path);
 		void stopMusic();
@@ -97,7 +98,8 @@ namespace rb
 		void playAmbience(std::string path);
 		void stopAmbience();
 		void changeBox(std::string path);
-	
+		void changeESCMenu(std::string path);
+
 	private:
 		void AppInit();
 
@@ -121,7 +123,7 @@ namespace rb
 
 		std::map<std::string, Sprite> mSprites;
 		std::map<std::string, Sprite>::iterator mSpriteIt;
-		
+
 		Scene mMainScene;
 		DialogueBox mDialogueBox;
 

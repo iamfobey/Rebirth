@@ -37,15 +37,15 @@ const char* vImageShaderCode = { "#version 330 core\n"
 		"\n"
 		"out vec2 TexCoord;\n"
 		"out vec3 ourColor;\n"
-		/*"uniform mat4 view;\n"
-		"uniform mat4 proj;\n"*/
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = vec4(aPos, 1.0);\n"
-		"	TexCoord = aTexCoord;\n"
-		"	ourColor = aColor;\n"
-		"}\n"
+	/*"uniform mat4 view;\n"
+	"uniform mat4 proj;\n"*/
+	"\n"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = vec4(aPos, 1.0);\n"
+	"	TexCoord = aTexCoord;\n"
+	"	ourColor = aColor;\n"
+	"}\n"
 };
 
 const char* fImageShaderCode = { "#version 330 core\n"
@@ -71,7 +71,7 @@ namespace rb
 
 		mTextShader.use();
 		glUniformMatrix4fv(glGetUniformLocation(mTextShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		
+
 		this->fontPath = fontPath;
 
 		float vertices[] = {
@@ -113,7 +113,7 @@ namespace rb
 		TextRenderer t;
 		t.setShader(&mTextShader);
 		t.Init(&mTextVAO, &mTextVBO, fontPath, 35);
-		
+
 		mTextButtonList.push_back(t);
 
 		return mTextButtonList.size() - 1;
@@ -135,9 +135,9 @@ namespace rb
 	{
 		static int oldState = GLFW_RELEASE;
 		int newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-		if (mPosMouseX >= x && mPosMouseX <= mTextButtonList[id].xpostemp && mPosMouseY >= mTextButtonList[id].ypostemp-8 && mPosMouseY <= mTextButtonList[id].ypostemp+20)
+		if (mPosMouseX >= x && mPosMouseX <= mTextButtonList[id].xpostemp && mPosMouseY >= mTextButtonList[id].ypostemp - 8 && mPosMouseY <= mTextButtonList[id].ypostemp + 20)
 		{
-			if (newState == GLFW_RELEASE && oldState == GLFW_PRESS) 
+			if (newState == GLFW_RELEASE && oldState == GLFW_PRESS)
 			{
 				oldState = newState;
 				return true;
@@ -211,9 +211,14 @@ namespace rb
 		glEnableVertexAttribArray(2);
 	}
 
+	void Menu::ChangeImage(int id, std::string path)
+	{
+		mImageTextureList[id].Load(path);
+	}
+
 	void Menu::SetMousePos(double x, double y)
 	{
 		mPosMouseX = x;
-		mPosMouseY = 900-y;
+		mPosMouseY = 900 - y;
 	}
 }

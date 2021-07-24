@@ -12,30 +12,30 @@
 #include FT_FREETYPE_H
 
 struct Character {
-    unsigned int TextureID;
-    glm::ivec2   Size;
-    glm::ivec2   Bearing;
-    unsigned int Advance;
+	unsigned int TextureID;
+	glm::ivec2   Size;
+	glm::ivec2   Bearing;
+	unsigned int Advance;
 };
 
 namespace rb
 {
-    class TextRenderer
-    {
-    public:
-        void Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size = 28);
-        void Render(std::string text, unsigned int* VAO, unsigned int* VBO, int width, int height, float x, float y, float scale, glm::vec3 color);
+	class TextRenderer
+	{
+	public:
+		void Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size = 28);
+		void Render(std::string text, unsigned int* VAO, unsigned int* VBO, int width, int height, float x, float y, float scale, glm::vec3 color);
 
-        void setShader(Shader* shader) { mShader = shader; }
+		void setShader(Shader* shader) { mShader = shader; }
 
-        float xpostemp;
-        float ypostemp;
-    private:
-        std::map<char, Character> mCharacters;
-        Shader* mShader;
+		float xpostemp;
+		float ypostemp;
+	private:
+		std::map<char, Character> mCharacters;
+		Shader* mShader;
 
-        bool mRenderBold = false;
-    };
+		bool mRenderBold = false;
+	};
 }
 
 #endif

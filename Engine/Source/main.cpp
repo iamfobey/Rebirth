@@ -1,6 +1,6 @@
 #include <Rebirth.h>
 
-class App  :  public rb::Application
+class App : public rb::Application
 {
 	void Init() override
 	{
@@ -15,6 +15,7 @@ class App  :  public rb::Application
 	void Label() override
 	{
 		changeBox("ui/textbox_blood.png");
+		changeESCMenu("ui/exitmenu_blood.png");
 		scene("bg/room4.jpg");
 		playMusic("music/Beginning.ogg");
 
@@ -29,48 +30,49 @@ class App  :  public rb::Application
 		text("Я продолжал сидеть в углу и в страхе не мог не произнести ни звука.");
 		text("Некто", "Я СКАЗАЛА \"ИДИ КО МНЕ\"!");
 		text("Ишики", "Нет… почему это произошло со мной… ПОЧЕМУ?!");
-		
+
 		stopMusic();
 		changeBox("ui/textbox_normal.png");
+		changeESCMenu("ui/exitmenu.png");
 		scene("bg/classroom.jpg");
 		playMusic("music/AcousticMeditation2.ogg");
-		
+
 		text("Привет! Меня зовут Хикидзава Ишики. Я ученик старшей школы и по стечению обстоятельств... второгодка.");
 		text("Со своими новыми одноклассниками я не общался, наверное потому что они боялись меня. Честно, я и сам бы себя боялся после всех услышанных слухов обо мне.");
 		text("Хотя была одна девочка, по моему ее звали Аяко... да… она самая.");
 		text("Она, хоть и держала расстояние, но была добра ко мне и хоть как-то пыталась скрасить мое и без того унылое одиночество.");
-		
+
 		stopMusic();
 		showSprite("sprites/ayako_smile.png");
 		playMusic("music/BigBlues.ogg");
-		
+
 		text("Аяко", "Привет, Ишики.");
 		text("Ишики", "П-привет.");
 		text("Аяко", "Надеюсь, ты сегодня подготовился к уроку? Сегодня же тест!");
 		text("Ишики", "Наверное, не знаю. Не могу сказать тебе точно.");
-		
+
 		hideSprite("sprites/ayako_smile.png");
 		showSprite("sprites/ayako_unhappy1.png");
-		
+
 		text("Аяко", "Дурак ты…");
 		text("Она положила свою тетрадку мне на стол.");
-		text("Аяко", "Сиди и читай!");		
+		text("Аяко", "Сиди и читай!");
 		text("Ишики", "И зачем это мне...");
 
 		hideSprite("sprites/ayako_unhappy1.png");
-		
+
 		text("До начала урока оставалось около 20 минут, думаю я мог бы постараться, дабы успокоить Аяко…");
 		text("Мысли", "Ай, ладно, все равно ведь делать нечего.");
 		text("Погрузившись в записи, я перестал ощущать пространство вокруг себя, будто бы находился в вакууме и время шло быстрее обычного.");
 		text("Наверняка со стороны я выглядел как какой-то постамент, ведь я практически не двигался, лишь за исключением того, когда нужно было пролистнуть страницу этой достаточно толстой тетради.");
-		
+
 		playSound("sfx/school_bell.ogg");
 		showSprite("sprites/shizyka_normal1.png");
-		
+
 		text("Когда прозвенел звонок все встали и в класс вошел учитель вместе с какой-то незнакомой мне девушкой. Больше всего привлекли мое внимание ее достаточно длинные, ухоженные, пепельного цвета, волосы.");
-		
+
 		stopMusic();
-		
+
 		text("Учитель", "Доброе утро, дети. Присаживайтесь.");
 		text("Учитель", "Давай, смелее, представься.");
 		text("Новенькая", "З-здравствуйте, я Симидзу Шизука, М-можно просто Шизука. Я буду учиться в вашем классе и надеюсь мы все подружимся.");
@@ -81,22 +83,22 @@ class App  :  public rb::Application
 		text("Мысли", "Какого черта она села рядом со мной? Спереди было полно свободных мест.");
 		text("Мысли", "Может быть… нет, я на эти же грабли не наступлю дважды, она просто добра ко всем. Тебе стоит выкинуть ее из головы, а то ведь в сердце западет.");
 		text("Мысли", "Так, сейчас должна быть контрольная… Надеюсь, от той тетради хотя бы будет какой-то прок.");
-		
+
 		hideSprite("sprites/shizyka_normal1.png");
-		
+
 		text("Спустя 30 минут...");
 		text("Учитель", "Так, сдаем листочки. В конце занятий результаты будут висеть на доске в коридоре первого этажа.");
 		text("Прозвенел звонок и учитель поспешно удалился. Класс наполнил шум и все столпились вокруг новенькой, тем самым вынудив меня бежать из этого маленького ада на крышу.");
-		
+
 		scene("bg/school_roof.jpg");
 		playMusic("music/AcousticGuitar1.ogg");
 
 		text("Ишики", "Блин, время обеда, а я забыл свой бенто. Придется остаться голодным.");
 		text("Шизука", "Ты забыл...");
 		text("Я услышал за спиной довольно знакомый голос.");
-		
+
 		showSprite("sprites/shizyka_normal1.png");
-		
+
 		text("Обернувшись, возле выхода стояла Шизука и держала в руках цветную коробочку, очень похожую на мой...");
 		text("Она немедленно подошла и протянула мне мой бенто.");
 		text("Ишики", "Откуда ты? Ай, не так уж это и важно. Спасибо. Тебя же Шизукой ведь зовут? Меня Ишики.");
@@ -112,13 +114,13 @@ class App  :  public rb::Application
 		text("Мысли", "На самом деле я очуметь какой голодный.");
 		text("Шизука присела рядом со мной и взяла его.");
 		text("Шизука", "Спасибо.");
-		
+
 		hideSprite("sprites/shizyka_normal1.png");
 		showSprite("sprites/shizyka_smile.png");
-		
+
 		text("Она улыбнулась, но сразу же обратно стала какой-то грустной.");
-		
-		hideSprite("sprites/shizyka_smile.png");		
+
+		hideSprite("sprites/shizyka_smile.png");
 		showSprite("sprites/shizyka_normal1.png");
 
 		text("Ишики", "Уже с кем-нибудь подружилась?");
@@ -180,41 +182,41 @@ class App  :  public rb::Application
 
 		text("Некоторое время спустя...");
 
-		showSprite("sprites/ayako_unhappy1.png");
-		
+		showSprite("sprites/ayako_normal.png");
+
 		text("Аяко", "Ишики! Ты где?! Пошли скорее, там результаты повесили.");
 		text("Ишики", "А что мне они.");
 		text("Аяко", "Ишики… если не хочешь чтобы я тебя придушила...");
 		text("Ишики", "Ладно, ладно, Моя Королева, жалкий крестьянин последует вашему зову.");
-		
-		hideSprite("sprites/ayako_unhappy1.png");		
+
+		hideSprite("sprites/ayako_normal.png");
 		showSprite("sprites/ayako_shy1.png");
-		
+
 		text("Аяко", "Вот и замечательно.");
 		text("Мысли", "Аяко засмущалась? Не думал, что это вообще возможно.");
-		
+
 		scene("bg/school_corridor.jpg");
-		
+
 		text("Мы спустились на первый этаж, вокруг доски уже никого не было. Найдя своё имя я приятно удивился, что сдал и результат был удовлетворительным для учителя.");
 		text("Ишики", "Смотри Аяко! Я сдал! Ахах, у кого большие…?!");
-		
+
 		showSprite("sprites/ayako_unhappy1.png");
-		
+
 		text("Аяко", "Не кричи. Дай посмотрю. Ну...");
 		text("В ее лице было явно выражено недовольство.");
 		text("Аяко", "Для того, кто вообще не готовился… ты молодец.");
 		text("Ишики", "Спасибо, Аяко! От тебя это приятно услышать!");
-		
+
 		hideSprite("sprites/ayako_unhappy1.png");
-		showSprite("sprites/ayako_shy1.png");		
+		showSprite("sprites/ayako_shy1.png");
 		playMusic("music/AcousticGuitar1.ogg");
-		
+
 		text("Она покраснела.");
 		text("Ишики", "Хей? Ты чего? Случаем не заболела?");
 		text("Аяко", "Н-нет. Слушай, я знаю, что скоро вот-вот будет новая контрольная, в общем, не хотел бы ты, чтобы я с тобой позанималась?");
 		text("Ишики", "Ну только если ты не против, то пойдем…");
-		
-		hideSprite("sprites/ayako_shy1.png");		
+
+		hideSprite("sprites/ayako_shy1.png");
 		showSprite("sprites/ayako_unhappy1.png");
 
 		text("Шизука", "Ого, Ишики, ты еще не ушел? А это?");
@@ -239,14 +241,14 @@ class App  :  public rb::Application
 		text("Ее голос был уже не таким уверенным как в начале диалога.");
 		text("Ишики", "Конечно, Аяко же не против. Да, Аяко?");
 		text("Аяко", "Конечно...");
-		
+
 		stopMusic();
 		playMusic("music/AcousticMeditation2.ogg");
-		
+
 		text("Ишики", "Вот и отлично, пойдем-те.");
-		
+
 		scene("bg/street_morning.jpg");
-		showSprite("sprites/ayako_unhappy1.png", 300);		
+		showSprite("sprites/ayako_unhappy1.png", 300);
 		showSprite("sprites/shizyka_normal1.png", 1100);
 
 		text("Мы шли по пустой улице. Шизука ни на шаг не отходила от меня, но постоянно отвлекалась на всякую мелочь. То на падающие листья, то на товары в ларьках, то на облака. Но вот Аяко...");
@@ -341,14 +343,14 @@ class App  :  public rb::Application
 		text("Однако мое чувство любопытства взяло надо мной вверх и я подошел к источнику звука.");
 		text("Ишики", "Никого. Почему от меня все убегают?");
 		text("Я почувствовал какой то укол в области шеи, после которого все силы меня покинули и я упал. Мои веки тяжелели и последнее что я увидел это чьи то ботинки.");
-		
+
 		stopMusic();
 		playMusic("music/Horror13.ogg");
 		scene("bg/room1.jpg");
 
 		text("Мысли", "Твою же… голова... раскалывается... где я? Тут темно и сыро...");
 
-		showSprite("sprites/ayako_unhappy1.png", 300);
+		showSprite("sprites/ayako_normal.png", 300);
 		showSprite("sprites/shizyka_normal1.png", 1100);
 
 		text("Шизука и Аяко", "ИШИКИ! Наконец-то ты проснулся.");
@@ -360,7 +362,7 @@ class App  :  public rb::Application
 		text("Шизука", "У меня есть, правда, это не мой. И я пыталась с него позвонить, да, Аяко? И ничего не вышло.");
 		text("Аяко", "Да, это так.");
 
-		hideSprite("sprites/ayako_unhappy1.png");
+		hideSprite("sprites/ayako_normal.png");
 		hideSprite("sprites/shizyka_normal1.png");
 		showSprite("sprites/shizyka_normal1.png");
 
@@ -371,7 +373,7 @@ class App  :  public rb::Application
 
 		text("Я взял из рук Шизуки телефон и начал копаться в нем. Но ничего не нашел кроме одного видео.");
 
-		showSprite("sprites/ayako_unhappy1.png", 300);
+		showSprite("sprites/ayako_normal.png", 300);
 		showSprite("sprites/shizyka_normal1.png", 1100);
 
 		text("Недолго думая я позвал Аяко и Шизуку и включил видео.");
@@ -382,9 +384,9 @@ class App  :  public rb::Application
 		scene("cg/ayako_aoamoaao.png");
 
 		text("Аяко", "Нет… мы не можем...");
-		
+
 		stopMusic();
-		
+
 		text("Шизука", "Ребят, смотрите!");
 		text("Шизука подняла ключ.");
 		text("Шизука", "У нас есть шанс выжить, нужно просто найти ключи! Вставайте!");
@@ -394,7 +396,7 @@ class App  :  public rb::Application
 		text("Аяко", "Да.");
 
 		scene("bg/room1.jpg");
-		showSprite("sprites/ayako_unhappy1.png", 300);
+		showSprite("sprites/ayako_normal.png", 300);
 		showSprite("sprites/shizyka_normal1.png", 1100);
 
 		text("Она заметно приободрилась.");
@@ -402,13 +404,6 @@ class App  :  public rb::Application
 		text("Ишики", "Идемте.");
 		text("Я начал дергать ручку двери, но она поддавалась с трудом.");
 		text("Ишики", "Девчат, отойдите от двери подальше.");
-
-		hideSprite("sprites/ayako_unhappy1.png");
-		hideSprite("sprites/shizyka_normal1.png");
-
-		showSprite("sprites/ayako_unhappy1.png", -300);
-		showSprite("sprites/shizyka_normal1.png", 500);
-
 		text("Я тоже отошел в бок и резко открыл дверь. Раздался выстрел.");
 		text("Ишики", "Черт… а ведь… я мог...");
 		text("Шизука", "Ишики! С тобой все впорядке?!");
@@ -455,10 +450,10 @@ class App  :  public rb::Application
 		text("Ишики", "Стой, Аяко.");
 		text("Я снял рубашку и перевязал ее рану.");
 		text("Ишики", "Ты дура! А если бы ты погибла?!");
-		
+
 		hideSprite("sprites/ayako_cry1.png");
 		showSprite("sprites/ayako_cry2.png");
-		
+
 		text("Аяко", "Я...");
 		text("Шизука", "Я пожалуй зайду и осмотрю комнату.");
 		text("Ишики", "Аяко, о чем ты думала?");
@@ -513,7 +508,7 @@ class App  :  public rb::Application
 		text("Ишики", "Надеюсь, что да.");
 
 		hideSprite("sprites/ayako_smile.png");
-		showSprite("sprites/ayako_unhappy1.png");
+		showSprite("sprites/ayako_normal.png");
 
 		text("Аяко погрустнела.");
 		text("Аяко", "Я поняла… пойдем дальше");
@@ -528,7 +523,7 @@ class App  :  public rb::Application
 		text("Шизука", "Ребят, я нашла ключ, но… он привязан. Мне страшно.");
 
 		hideSprite("sprites/shizyka_normal1.png");
-		showSprite("sprites/ayako_unhappy1.png", 300);
+		showSprite("sprites/ayako_normal.png", 300);
 		showSprite("sprites/shizyka_normal1.png", 1100);
 
 		text("Аяко", "Дергай быстрее его и беги к нам.");
@@ -538,19 +533,20 @@ class App  :  public rb::Application
 		text("Шизука", "Иши…");
 
 		hideSprite("sprites/shizyka_normal1.png");
-		hideSprite("sprites/ayako_unhappy1.png");
-		showSprite("sprites/shizyka_close.png");
+		hideSprite("sprites/ayako_normal.png");
+		showSprite("sprites/shizyka_die.png");
 		changeBox("ui/textbox_blood.png");
+		changeESCMenu("ui/exitmenu_blood.png");
 
 		text("Из за стены вылетело копье, которое пронзило Шизуку насквозь.");
 
 		scene("cg/shiza_kill.png");
 
 		text("Шизука", "Иши...ки...");
-		text("Она замертво упала на пол.");		
-		
+		text("Она замертво упала на пол.");
+
 		playMusic("music/Horror13.ogg");
-		
+
 		text("Ишики", "НЕЕЕЕЕТ! Зачем ты это сделала… зачем...");
 
 		scene("bg/room3.jpg");
@@ -565,7 +561,7 @@ class App  :  public rb::Application
 		text("Аяко", "Вы знакомы всего день И ЭТОГО ХВАТИЛО ЧТОБЫ ЗАПОЛУЧИТЬ ТВОЕ СЕРДЦЕ?! Но теперь это не имеет смысла, Ишики.");
 		text("Аяко", "Теперь нам никто не помешает. Теперь есть только ТЫ и Я.");
 		text("Ишики", "Нет, Аяко, нет никаких ты и я! Я ухожу отсюда!");
-		
+
 		stopMusic();
 		playMusic("music/FightScene.ogg");
 
@@ -615,7 +611,7 @@ class App  :  public rb::Application
 		text("Ишики", "Шизука… я… иду к тебе…");
 	}
 };
- 
+
 int main()
 {
 	try

@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace rb
-{	
+{
 	WindowsWindow::WindowsWindow(WindowProps* props)
 	{
 		Init(props);
@@ -38,11 +38,11 @@ namespace rb
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
-				glViewport(0, 0, width, height);
+			glViewport(0, 0, width, height);
 			});
 
 		glfwSwapInterval(1);
-		
+
 		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
 			if (focused)
 			{

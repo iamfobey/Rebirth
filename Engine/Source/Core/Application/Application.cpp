@@ -161,6 +161,15 @@ namespace rb
 
 		while (!glfwWindowShouldClose(mWindow))
 		{
+			/*glm::ortho(0.0f, (float)1600, 0.0f, (float)900, 0.1f, 100.0f);
+			glViewport(0, 0, 1600, 900);*/
+
+			int w = 1600, h = 900;
+
+			glfwGetWindowSize(mWindow, &w, &h);
+			glViewport(0, 0, w, h);
+			glm::ortho(0.0f, (float)w, 0.0f, (float)h, 0.1f, 100.0f);
+
 			glClear(GL_COLOR_BUFFER_BIT);
 			glfwGetCursorPos(mWindow, &xpos, &ypos);
 
@@ -211,6 +220,27 @@ namespace rb
 				}
 			}
 
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+
+			if (ImGui::Begin("Debug"))
+			{
+				double cx, cy;
+				double ox = 0, oy = 0, oz;
+				glfwGetCursorPos(mWindow, &cx, &cy);
+
+				glu::ClientToGL(cx, cy, &ox, &oy, &oz);
+
+				ImGui::Text("Cursor X: %.f", cx);
+				ImGui::Text("Cursor Y: %.f", cy);
+				ImGui::Text("OGL X: %f", ox);
+				ImGui::Text("OGL Y: %f", oy);
+			}
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 			glfwPollEvents();
 			glfwSwapBuffers(mWindow);
 		}
@@ -232,7 +262,7 @@ namespace rb
 		glfwGetCursorPos(mWindow, &xpos, &ypos);
 
 		mMainScene.Render();
-		
+
 		if (!mMainScene.mDissolve && !mStartGame)
 		{
 			if (drawbuttons)
@@ -262,7 +292,6 @@ namespace rb
 							}
 						}
 
-
 						if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 752.0f, 510.0f, mWindow)) {
 							if (LoadProgress(settings.gamePath, 2))
 							{
@@ -270,7 +299,6 @@ namespace rb
 								break;
 							}
 						}
-
 
 						if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 752.0f, 470.0f, mWindow)) {
 							if (LoadProgress(settings.gamePath, 3))
@@ -280,7 +308,6 @@ namespace rb
 							}
 						}
 
-
 						if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 752.0f, 430.0f, mWindow)) {
 							if (LoadProgress(settings.gamePath, 4))
 							{
@@ -288,7 +315,6 @@ namespace rb
 								break;
 							}
 						}
-
 
 						if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 752.0f, 390.0f, mWindow)) {
 							if (LoadProgress(settings.gamePath, 5))
@@ -363,7 +389,7 @@ namespace rb
 
 			if (mMenu.RenderTextButton(SaveButton, "Загрузить", 730.0f, 465.0f, mWindow))
 			{
-				renderButtons = false; 
+				renderButtons = false;
 				isLoadSave = true;
 
 				return;
@@ -400,25 +426,21 @@ namespace rb
 					if (LoadProgress(settings.gamePath, 1))
 						RenderEscMenu = false;
 				}
-					
 
 				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", 752.0f, 510.0f, mWindow)) {
 					if (LoadProgress(settings.gamePath, 2))
 						RenderEscMenu = false;
 				}
-					
 
 				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", 752.0f, 470.0f, mWindow)) {
 					if (LoadProgress(settings.gamePath, 3))
 						RenderEscMenu = false;
 				}
-					
 
 				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", 752.0f, 430.0f, mWindow)) {
 					if (LoadProgress(settings.gamePath, 4))
 						RenderEscMenu = false;
 				}
-					
 
 				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", 752.0f, 390.0f, mWindow)) {
 					if (LoadProgress(settings.gamePath, 5))
@@ -498,14 +520,14 @@ namespace rb
 							t = true;
 						}
 					case CmdList::SHOWSPRITE:
-					{			
+					{
 						if (!t)
 						{
 							spritesToDisplay.push_back(list[temp].content);
 							Sprite tempSprite;
 							tempSprite.Init();
 							if (!spritesToDelete.empty())
-							{								
+							{
 								for (size_t i = 0; i < spritesToDisplay.size(); i++)
 								{
 									if (i < spritesToDelete.size())
@@ -552,6 +574,9 @@ namespace rb
 					case CmdList::CHANGEBOX:
 						mDialogueBox.SetBox(settings.gamePath + settings.imagePath + list[temp].content);
 						goto end;
+						break;
+					case CmdList::CHANGEESCMENU:
+						mMenu.ChangeImage(ESCImage, settings.gamePath + settings.imagePath + list[temp].content);
 						break;
 					case CmdList::PLAYAMBIENCE:
 						if (!ambStop)
@@ -664,6 +689,11 @@ namespace rb
 			it++;
 			it2++;
 			goto start;
+		case CmdList::CHANGEESCMENU:
+			mMenu.ChangeImage(ESCImage, settings.gamePath + settings.imagePath + list[it].content);
+			it++;
+			it2++;
+			goto start;
 		default:
 			break;
 		}
@@ -697,7 +727,7 @@ namespace rb
 	{
 		list.push_back({ CmdList::SHOWSPRITE, path,  " ",  " ", x, y });
 	}
-	void Application::hideSprite(std::string path) 
+	void Application::hideSprite(std::string path)
 	{
 		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 800, 450 });
 	}
@@ -723,10 +753,14 @@ namespace rb
 	}
 	void Application::stopAmbience()
 	{
-		list.push_back({ CmdList::STOPAMBIENCE,  " ",  " ",  " ", 800, 450});
+		list.push_back({ CmdList::STOPAMBIENCE,  " ",  " ",  " ", 800, 450 });
 	}
 	void Application::changeBox(std::string path)
 	{
 		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 800, 450 });
+	}
+	void Application::changeESCMenu(std::string path)
+	{
+		list.push_back({ CmdList::CHANGEESCMENU, path, " ", " ", 800, 450 });
 	}
 }

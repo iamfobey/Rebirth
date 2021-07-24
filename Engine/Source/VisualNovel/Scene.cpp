@@ -145,5 +145,4 @@ namespace rb
 		mDissolve = true;
 		mD2 = true;
 	}
-
 }
