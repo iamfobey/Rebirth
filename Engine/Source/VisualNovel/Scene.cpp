@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-const char* vImageShaderCode = {
+const char* vSceneShaderCode = {
 "#version 330 core\n"
 "layout(location = 0) in vec3 aPos;\n"
 "layout(location = 1) in vec3 aColor;\n"
@@ -15,7 +15,7 @@ const char* vImageShaderCode = {
 "}\n"
 };
 
-const char* fImageShaderCode = {
+const char* fSceneShaderCode = {
 "#version 330 core\n"
 "out vec4 FragColor;\n"
 "in vec3 ourColor;\n"
@@ -46,7 +46,7 @@ namespace rb
 						2, 3, 0
 		};
 
-		mSceneShader.load(vImageShaderCode, fImageShaderCode);
+		mSceneShader.load(vSceneShaderCode, fSceneShaderCode);
 
 		glGenVertexArrays(1, &mVAO);
 		glGenBuffers(1, &mVBO);

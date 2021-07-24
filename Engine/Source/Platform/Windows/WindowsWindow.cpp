@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace rb
-{
+{	
 	WindowsWindow::WindowsWindow(WindowProps* props)
 	{
 		Init(props);
@@ -42,7 +42,18 @@ namespace rb
 			});
 
 		glfwSwapInterval(1);
+		
+		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
+			if (focused)
+			{
+				glfwSwapInterval(1);
+			}
+			else
+			{
+				glfwSwapInterval(-5);
+			}
+			});
 
-		glfwSetInputMode(m_Window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
+		glm::ortho(0.0f, (float)props->Width, 0.0f, (float)props->Height, 0.1f, 100.0f);
 	}
 }

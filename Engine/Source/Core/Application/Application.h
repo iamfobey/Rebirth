@@ -15,6 +15,7 @@
 #include <VisualNovel/Sound.h>
 #include <VisualNovel/Music.h>
 #include <VisualNovel/Menu.h>
+#include <VisualNovel/Ambience.h>
 
 #include <OpenGL/GLUtils.h>
 
@@ -24,8 +25,6 @@
 #include <GLFW/glfw3.h>
 
 #include <map>
-
-#include <thread>
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 bool SaveProgress(std::string path, int slot);
@@ -41,6 +40,8 @@ enum CmdList
 	STOPMUSIC,
 	SHOWSPRITE,
 	HIDESPRITE,
+	PLAYAMBIENCE,
+	STOPAMBIENCE,
 	CHANGEBOX
 };
 
@@ -93,6 +94,8 @@ namespace rb
 		void stopMusic();
 		void playSound(std::string path);
 		void stopSound();
+		void playAmbience(std::string path);
+		void stopAmbience();
 		void changeBox(std::string path);
 	
 	private:
@@ -127,6 +130,7 @@ namespace rb
 
 		Sound mSound;
 		Music mMusic;
+		Ambience mAmbience;
 
 		Menu mMenu;
 
@@ -136,7 +140,7 @@ namespace rb
 		bool mCloseWindow = false;
 		bool mStartGame = false;
 
-		int StartButton, LoadSaveButton, SaveButton, ExitButton, SaveSlotButton1, SaveSlotButton2, SaveSlotButton3, SaveSlotButton4, SaveSlotButton5, ReturnButton, ReturnButton2, ReturnButton3;
+		int StartButton, LoadSaveButton, SaveButton, ExitButton, SaveSlotButton1, SaveSlotButton2, SaveSlotButton3, SaveSlotButton4, SaveSlotButton5, ReturnButton, ReturnButton2, ReturnButton3, ESCImage;
 
 		bool isLoadSave = false;
 

@@ -45,6 +45,8 @@ unsigned int spriteindices[] = {
 			2, 3, 0
 };
 
+extern unsigned int windowWidth, windowHeight;
+
 namespace rb
 {
 	void Sprite::Init()

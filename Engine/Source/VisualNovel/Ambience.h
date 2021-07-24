@@ -1,19 +1,19 @@
 #pragma once
 
-#ifndef MUSIC_H
-#define MUSIC_H
+#ifndef AMBIENCE_H
+#define AMBIENCE_H
 
 #include <irrklang/irrKlang.h>
 
 namespace rb
 {
-	class Music
+	class Ambience
 	{
 		float mVolume = 0.5f;
 		float mTempVolume = 0.0f;
 	public:
-		Music() { SoundEngine = irrklang::createIrrKlangDevice(); }
-		~Music() { }
+		Ambience() { SoundEngine = irrklang::createIrrKlangDevice(); }
+		~Ambience() { }
 
 		void play(const char* path) {
 			this->path = path;

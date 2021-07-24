@@ -5,6 +5,7 @@
 
 #include <OpenGL/GLTextRenderer.h>
 #include <OpenGL/GLShader.h>
+#include <OpenGL/GLTexture.h>
 
 #include <GLFW/glfw3.h>
 
@@ -19,10 +20,18 @@ namespace rb
 		void Init(std::string fontPath, int width, int height);
 
 		int CreateTextButton();
+		int CreateImage(std::string path);
+		
 		bool RenderTextButton(int id, std::string text, double x, double y, GLFWwindow* window);
+		void RenderImage(int id);
+		void SetRenderImagePos(double x, double y);
+
 		void SetMousePos(double x, double y);
 	private:
 		std::vector<TextRenderer> mTextButtonList;
+		std::vector<Shader> mImageShaderList;
+		std::vector<Texture> mImageTextureList;
+
 		std::string mText;
 		double mPosX, mPosY;
 
@@ -30,7 +39,8 @@ namespace rb
 
 		Shader mTextShader;
 
-		unsigned int VAO, VBO;
+		unsigned int mVAO, mVBO, mEBO;
+		unsigned int mTextVAO, mTextVBO;
 
 		std::string fontPath;
 		int width, height;

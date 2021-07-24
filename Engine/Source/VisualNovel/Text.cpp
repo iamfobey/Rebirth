@@ -28,7 +28,7 @@ namespace rb
 {
 	void Text::Init(std::string fontPath, int width, int height, int size)
 	{
-		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1600), 0.0f, static_cast<float>(900));
 
 		mTextShader.load(vvTextShaderCode, ffTextShaderCode);
 
