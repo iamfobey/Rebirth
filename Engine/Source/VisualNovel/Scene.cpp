@@ -123,7 +123,7 @@ namespace rb
 			}
 			break;
 		}
-
+		
 		mSceneShader.use();
 
 		glBindTexture(GL_TEXTURE_2D, mSceneTexture.GetID());
@@ -131,6 +131,9 @@ namespace rb
 		glBindVertexArray(mVAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindVertexArray(0);
 	}
 
 	void Scene::Load(std::string imagePath)

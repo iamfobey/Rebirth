@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <stb/stb_image.h>
+
 namespace rb
 {
 	WindowsWindow::WindowsWindow(WindowProps* props)
@@ -29,7 +31,7 @@ namespace rb
 			throw std::runtime_error("Failed to create GLFW window!");
 
 		glfwMakeContextCurrent(m_Window);
-
+		
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 			throw std::runtime_error("Failed to init GLAD!");
 
@@ -54,6 +56,9 @@ namespace rb
 			}
 			});
 
-		glm::ortho(0.0f, (float)props->Width, 0.0f, (float)props->Height, 0.1f, 100.0f);
+		GLFWimage images[1];
+		images[0].pixels = stbi_load("game/images/misc/icon.png", &images[0].width, &images[0].height, 0, 4);
+		glfwSetWindowIcon(m_Window, 1, images);
+		stbi_image_free(images[0].pixels);
 	}
 }

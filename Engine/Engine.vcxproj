@@ -351,6 +351,7 @@
     <ClCompile Include="Source\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="Source\VisualNovel\Ambience.h" />
     <ClInclude Include="Source\VisualNovel\Menu.h" />
     <ClInclude Include="Source\VisualNovel\Music.h" />
@@ -374,6 +375,49 @@
   <ItemGroup>
     <None Include="ThirdParty\libs\x32\irrKlang.dll" />
     <None Include="ThirdParty\libs\x64\irrKlang.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="game\images\bg\abandoned.jpg" />
+    <Image Include="game\images\bg\black.jpg" />
+    <Image Include="game\images\bg\classroom.jpg" />
+    <Image Include="game\images\bg\lakeside_daytime.jpg" />
+    <Image Include="game\images\bg\park.png" />
+    <Image Include="game\images\bg\room1.jpg" />
+    <Image Include="game\images\bg\room2.jpg" />
+    <Image Include="game\images\bg\room3.jpg" />
+    <Image Include="game\images\bg\room4.jpg" />
+    <Image Include="game\images\bg\school_corridor.jpg" />
+    <Image Include="game\images\bg\school_roof.jpg" />
+    <Image Include="game\images\bg\street_morning.jpg" />
+    <Image Include="game\images\bg\theend.jpg" />
+    <Image Include="game\images\cg\ayako_aoamoaao.png" />
+    <Image Include="game\images\cg\shiza_kill.png" />
+    <Image Include="game\images\misc\icon.ico" />
+    <Image Include="game\images\misc\icon.png" />
+    <Image Include="game\images\sprites\ayako_angry.png" />
+    <Image Include="game\images\sprites\ayako_cry1.png" />
+    <Image Include="game\images\sprites\ayako_cry2.png" />
+    <Image Include="game\images\sprites\ayako_normal.png" />
+    <Image Include="game\images\sprites\ayako_sad.png" />
+    <Image Include="game\images\sprites\ayako_shy1.png" />
+    <Image Include="game\images\sprites\ayako_shy2.png" />
+    <Image Include="game\images\sprites\ayako_shy3.png" />
+    <Image Include="game\images\sprites\ayako_smile.png" />
+    <Image Include="game\images\sprites\ayako_unhappy1.png" />
+    <Image Include="game\images\sprites\ayako_unhappy2.png" />
+    <Image Include="game\images\sprites\shizyka_close.png" />
+    <Image Include="game\images\sprites\shizyka_die.png" />
+    <Image Include="game\images\sprites\shizyka_normal1.png" />
+    <Image Include="game\images\sprites\shizyka_normal2.png" />
+    <Image Include="game\images\sprites\shizyka_smile.png" />
+    <Image Include="game\images\ui\bloodsplat_big.png" />
+    <Image Include="game\images\ui\exitmenu.png" />
+    <Image Include="game\images\ui\exitmenu_blood.png" />
+    <Image Include="game\images\ui\textbox_blood.png" />
+    <Image Include="game\images\ui\textbox_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Rebirth.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

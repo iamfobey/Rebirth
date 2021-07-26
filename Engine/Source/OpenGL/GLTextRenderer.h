@@ -11,7 +11,7 @@
 #include <freetype/ft2build.h>
 #include FT_FREETYPE_H
 
-struct Character {
+static struct Character {
 	unsigned int TextureID;
 	glm::ivec2   Size;
 	glm::ivec2   Bearing;

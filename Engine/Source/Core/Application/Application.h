@@ -26,11 +26,11 @@
 
 #include <map>
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-bool SaveProgress(std::string path, int slot);
-bool LoadProgress(std::string path, int slot);
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static bool SaveProgress(std::string path, int slot);
+static bool LoadProgress(std::string path, int slot);
 
-enum CmdList
+static enum CommandEnum
 {
 	TEXT,
 	SCENE,
@@ -47,9 +47,9 @@ enum CmdList
 	RETURNTOMENU
 };
 
-struct Cmds
+static struct CommandStruct
 {
-	CmdList command;
+	CommandEnum command;
 	std::string content;
 
 	std::string who;
@@ -59,19 +59,19 @@ struct Cmds
 	float poxY = 1.0f;
 };
 
-struct RenderContent
+static struct RenderContent
 {
 	std::string text;
 	std::string name;
 	std::string imagePath;
 };
 
-struct Setttings
+static struct Setttings
 {
-	std::string imagePath = "images/";
-	std::string fontPath = "fonts/";
-	std::string soundPath = "sounds/";
 	std::string gamePath = "game/";
+	std::string imagePath = gamePath + "images/";
+	std::string fontPath = gamePath + "fonts/";
+	std::string soundPath = gamePath + "sounds/";
 };
 
 namespace rb
@@ -115,13 +115,13 @@ namespace rb
 		void RenderMenu();
 		void RenderEscapeMenu();
 	private:
-		std::vector<Cmds> list;
+		std::vector<CommandStruct> mCommandList;
 
 		Logger mLogger;
 
 		GLFWwindow* mWindow;
 
-		RenderContent content;
+		RenderContent mRenderContent;
 
 		std::map<std::string, Sprite> mSprites;
 		std::map<std::string, Sprite>::iterator mSpriteIt;
@@ -147,13 +147,6 @@ namespace rb
 		int StartButton, LoadSaveButton, SaveButton, ExitButton, SaveSlotButton1, SaveSlotButton2, SaveSlotButton3, SaveSlotButton4, SaveSlotButton5, ReturnButton, ReturnButton2, ReturnButton3, ESCImage;
 
 		bool isLoadSave = false;
-
-		float tx1 = 500.0f;
-		float ty1 = 1.0f;
-		float tx2 = 1.0f;
-		float ty2 = 1.0f;
-		float tx3 = 1.0f;
-		float ty3 = 1.0f;
 
 		unsigned int VAO, VBO;
 	};

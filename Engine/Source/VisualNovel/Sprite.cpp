@@ -92,6 +92,9 @@ namespace rb
 
 		glBindTexture(GL_TEXTURE_2D, mSpriteTexture.GetID());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindVertexArray(0);
 	}
 
 	void Sprite::Load(std::string imagePath)

@@ -11,24 +11,14 @@ namespace rb
 	{
 		float mVolume = 1.0f;
 	public:
-		Sound() { SoundEngine = irrklang::createIrrKlangDevice(); }
+		Sound();
 		~Sound() {}
 
-		void play(const char* path) {
-			SoundEngine->setSoundVolume(mVolume);
-			SoundEngine->play2D(path);
-		}
+		void play(const char* path);
+		void stop();
+		void SetVolume(float volume);
 
-		void stop() {
-			SoundEngine->stopAllSounds();
-		}
-
-		void SetVolume(float volume) {
-			mVolume = volume;
-			SoundEngine->setSoundVolume(volume);
-		}
 		irrklang::ISoundEngine* SoundEngine;
-	private:
 	};
 }
 

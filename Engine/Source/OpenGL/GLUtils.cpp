@@ -8,7 +8,7 @@ namespace rb
 	{
 		void ClientToGL(int x, int y, double* ox, double* oy, double* oz)
 		{
-			int vp[4];
+			/*int vp[4];
 
 			double pM[16], mM[16];
 			float z;
@@ -20,7 +20,7 @@ namespace rb
 			glGetDoublev(GL_PROJECTION_MATRIX, pM);			
 
 			glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
-			gluUnProject(x, y, z, mM, pM, vp, ox, oy, oz);
+			gluUnProject(x, y, z, mM, pM, vp, ox, oy, oz);*/
 		}
 	}
 }

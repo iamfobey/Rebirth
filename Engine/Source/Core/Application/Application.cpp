@@ -33,36 +33,63 @@ const char* fTextShaderCode = { "#version 330 core\n"
 
 #include <fstream>
 
-unsigned int it = 0;
-unsigned int it2 = 0;
+static unsigned int it = 0;
+static unsigned int it2 = 0;
 
-bool IsLoadSave = false;
-bool NextState = false;
-bool RenderEscMenu = false;
-bool renderButtons = true;
+static bool IsLoadSave = false;
+static bool NextState = false;
+static bool RenderEscMenu = false;
+static bool renderButtons = true;
+static bool DebugInfo = false;
 
 extern int WNDwidth, WNDheight;
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	switch (key)
 	{
 	case GLFW_KEY_ESCAPE:
 		if (action == GLFW_PRESS)
+		{
 			if (RenderEscMenu)
+			{
 				RenderEscMenu = false;
+				break;
+			}
 			else
+			{
 				RenderEscMenu = true;
+				break;
+			}
+		}
 		renderButtons = true;
 		break;
 	case GLFW_KEY_SPACE:
-		if (action == GLFW_PRESS) NextState = true;
+		if (action == GLFW_PRESS)
+		{
+			NextState = true;
+			break;
+		}
+	case GLFW_KEY_D:
+		if (action == GLFW_PRESS)
+		{
+			if (DebugInfo)
+			{
+				DebugInfo = false;
+				break;
+			}
+			else
+			{
+				DebugInfo = true;
+				break;
+			}
+		}
 	default:
 		break;
 	}
 }
 
-bool SaveProgress(std::string path, int slot)
+static bool SaveProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios_base::out | std::ios_base::trunc);
 
@@ -76,7 +103,7 @@ bool SaveProgress(std::string path, int slot)
 	return true;
 }
 
-bool LoadProgress(std::string path, int slot)
+static bool LoadProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios::in);
 
@@ -110,10 +137,10 @@ namespace rb
 		mLogger.Init(settings.gamePath);
 		InitWindow();
 		mMainScene.Init();
-		mMenu.Init(settings.gamePath + settings.fontPath, window.Width, window.Height);
+		mMenu.Init(settings.fontPath, window.Width, window.Height);
 		mEscSprite.Init();
-		mEscSprite.Load(settings.gamePath + "images/ui/exitmenu.png");
-		mDialogueBox.Init(settings.gamePath + "images/ui/textbox_blood.png", settings.gamePath + settings.fontPath, window.Width, window.Height);
+		mEscSprite.Load(settings.imagePath + "ui/exitmenu.png");
+		mDialogueBox.Init(settings.imagePath + "ui/textbox_blood.png", settings.fontPath, window.Width, window.Height);
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -140,11 +167,11 @@ namespace rb
 			0x0400, 0x044F,
 			0,
 		};
-		std::string t = settings.gamePath + settings.fontPath;
+		std::string t = settings.fontPath;
 		io.Fonts->AddFontFromFileTTF(t.c_str(), 13.5f, &font_config, ranges);
 		io.IniFilename = nullptr;
 
-		mMainScene.Load(settings.gamePath + settings.imagePath + "ui/bloodsplat_big.png");
+		mMainScene.Load(settings.imagePath + "ui/menu.png");
 
 		StartButton = mMenu.CreateTextButton();
 		LoadSaveButton = mMenu.CreateTextButton();
@@ -155,7 +182,7 @@ namespace rb
 		SaveSlotButton3 = mMenu.CreateTextButton();
 		SaveSlotButton4 = mMenu.CreateTextButton();
 		SaveSlotButton5 = mMenu.CreateTextButton();
-		ESCImage = mMenu.CreateImage("game/images/ui/exitmenu.png");
+		ESCImage = mMenu.CreateImage(settings.imagePath + "ui/exitmenu.png");
 
 		mSound.SetVolume(0.25f);
 		mMusic.SetVolume(0.25f);
@@ -201,7 +228,7 @@ namespace rb
 						mSpriteIt->second.Render();
 					}
 
-					mDialogueBox.Render(content.name, content.text);
+					mDialogueBox.Render(mRenderContent.name, mRenderContent.text);
 
 					if (IsLoadSave)
 					{
@@ -226,6 +253,26 @@ namespace rb
 							}
 						});
 				}
+			}
+
+			if (DebugInfo)
+			{
+				ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+				ImGui_ImplOpenGL3_NewFrame();
+				ImGui_ImplGlfw_NewFrame();
+				ImGui::NewFrame();
+
+				if (ImGui::Begin("Debug Info"))
+				{
+					ImGui::Text("FPS: %.f", io.Framerate);
+					ImGui::Text("Iterator: %i", it);
+
+					ImGui::End();
+				}
+
+				ImGui::Render();
+				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			}
 
 			glfwPollEvents();
@@ -362,7 +409,7 @@ namespace rb
 
 	void Application::RenderEscapeMenu()
 	{
-		mMenu.SetRenderImagePos(WNDwidth/119500.0f, -0.176);
+		mMenu.SetRenderImagePos(WNDwidth/139500.0f, -0.176);
 		mMenu.RenderImage(ESCImage);
 
 		if (renderButtons)
@@ -470,8 +517,6 @@ namespace rb
 
 	void Application::NextStatement()
 	{
-		/*glfwWaitEvents();*/
-
 		if (IsLoadSave)
 		{
 			if (it2 != it)
@@ -492,26 +537,26 @@ namespace rb
 					if (temp < 0)
 						break;
 
-					switch (list[temp].command)
+					switch (mCommandList[temp].command)
 					{
-					case CmdList::TEXT:
+					case CommandEnum::TEXT:
 						if (text)
 						{
 							text = false;
 							it = temp;
 						}
 						break;
-					case CmdList::SCENE:
+					case CommandEnum::SCENE:
 						if (!t)
 						{
-							mMainScene.Load(settings.gamePath + settings.imagePath + list[temp].content);
+							mMainScene.Load(settings.imagePath + mCommandList[temp].content);
 							t = true;
 						}
-					case CmdList::SHOWSPRITE:
+					case CommandEnum::SHOWSPRITE:
 					{
 						if (!t)
 						{
-							spritesToDisplay.push_back(list[temp].content);
+							spritesToDisplay.push_back(mCommandList[temp].content);
 							Sprite tempSprite;
 							tempSprite.Init();
 							if (!spritesToDelete.empty())
@@ -522,9 +567,9 @@ namespace rb
 									{
 										if (spritesToDelete[i] != spritesToDisplay[i + 1] && spritesToDelete[i] != spritesToDisplay[i + 2])
 										{
-											tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
-											tempSprite.SetPosition(list[temp].posX, list[temp].poxY);
-											mSprites[list[temp].content] = tempSprite;
+											tempSprite.Load(settings.imagePath + mCommandList[temp].content);
+											tempSprite.SetPosition(mCommandList[temp].posX, mCommandList[temp].poxY);
+											mSprites[mCommandList[temp].content] = tempSprite;
 										}
 									}
 									else
@@ -535,46 +580,46 @@ namespace rb
 							}
 							else
 							{
-								tempSprite.Load(settings.gamePath + settings.imagePath + list[temp].content);
-								tempSprite.SetPosition(list[temp].posX, list[temp].poxY);
-								mSprites[list[temp].content] = tempSprite;
+								tempSprite.Load(settings.imagePath + mCommandList[temp].content);
+								tempSprite.SetPosition(mCommandList[temp].posX, mCommandList[temp].poxY);
+								mSprites[mCommandList[temp].content] = tempSprite;
 							}
 							break;
 						}
 					}
-					case CmdList::HIDESPRITE:
-						spritesToDelete.push_back(list[temp].content);
+					case CommandEnum::HIDESPRITE:
+						spritesToDelete.push_back(mCommandList[temp].content);
 						break;
-					case CmdList::PLAYMUSIC:
+					case CommandEnum::PLAYMUSIC:
 						if (!soundStop)
 						{
 							mMusic.SoundEngine->stopAllSounds();
-							std::string t = settings.gamePath + settings.soundPath + list[temp].content;
+							std::string t = settings.soundPath + mCommandList[temp].content;
 							mMusic.play(t.c_str());
 						}
 						break;
-					case CmdList::PLAYSOUND:
+					case CommandEnum::PLAYSOUND:
 						break;
-					case CmdList::STOPMUSIC:
+					case CommandEnum::STOPMUSIC:
 						mMusic.SoundEngine->stopAllSounds();
 						soundStop = true;
 						break;
-					case CmdList::CHANGEBOX:
-						mDialogueBox.SetBox(settings.gamePath + settings.imagePath + list[temp].content);
+					case CommandEnum::CHANGEBOX:
+						mDialogueBox.SetBox(settings.imagePath + mCommandList[temp].content);
 						goto end;
 						break;
-					case CmdList::CHANGEESCMENU:
-						mMenu.ChangeImage(ESCImage, settings.gamePath + settings.imagePath + list[temp].content);
+					case CommandEnum::CHANGEESCMENU:
+						mMenu.ChangeImage(ESCImage, settings.imagePath + mCommandList[temp].content);
 						break;
-					case CmdList::PLAYAMBIENCE:
+					case CommandEnum::PLAYAMBIENCE:
 						if (!ambStop)
 						{
 							mAmbience.SoundEngine->stopAllSounds();
-							std::string t = settings.gamePath + settings.soundPath + list[temp].content;
+							std::string t = settings.soundPath + mCommandList[temp].content;
 							mAmbience.play(t.c_str());
 						}
 						break;
-					case CmdList::STOPAMBIENCE:
+					case CommandEnum::STOPAMBIENCE:
 						ambStop = true;
 						break;
 					default:
@@ -592,103 +637,103 @@ namespace rb
 
 	end: {}
 
-		if (it == list.size())
+		if (it == mCommandList.size())
 			return;
 
 	start: {}
 
-		switch (list[it].command)
+		switch (mCommandList[it].command)
 		{
-		case CmdList::TEXT:
-			if (list[it].who != "")
+		case CommandEnum::TEXT:
+			if (mCommandList[it].who != "")
 			{
-				content.name = list[it].who;
-				content.text = list[it].what;
+				mRenderContent.name = mCommandList[it].who;
+				mRenderContent.text = mCommandList[it].what;
 			}
 			else
 			{
-				content.name = "";
-				content.text = list[it].what;
+				mRenderContent.name = "";
+				mRenderContent.text = mCommandList[it].what;
 			}
 			break;
-		case CmdList::SCENE:
-			mMainScene.Load(settings.gamePath + settings.imagePath + list[it].content);
+		case CommandEnum::SCENE:
+			mMainScene.Load(settings.imagePath + mCommandList[it].content);
 			mSprites.clear();
 			it++;
 			it2++;
 			goto start;
-		case CmdList::SHOWSPRITE:
+		case CommandEnum::SHOWSPRITE:
 		{
 			Sprite tempSprite;
 			tempSprite.Init();
-			tempSprite.Load(settings.gamePath + settings.imagePath + list[it].content);
-			tempSprite.SetPosition(list[it].posX, list[it].poxY);
-			mSprites[list[it].content] = tempSprite;
+			tempSprite.Load(settings.imagePath + mCommandList[it].content);
+			tempSprite.SetPosition(mCommandList[it].posX, mCommandList[it].poxY);
+			mSprites[mCommandList[it].content] = tempSprite;
 			it++;
 			it2++;
 			goto start;
 		}
-		case CmdList::HIDESPRITE:
-			mSprites.erase(mSprites.find(list[it].content));
+		case CommandEnum::HIDESPRITE:
+			mSprites.erase(mSprites.find(mCommandList[it].content));
 			it++;
 			it2++;
 			goto start;
-		case CmdList::PLAYMUSIC:
+		case CommandEnum::PLAYMUSIC:
 		{
-			std::string t = settings.gamePath + settings.soundPath + list[it].content;
+			std::string t = settings.soundPath + mCommandList[it].content;
 			mMusic.play(t.c_str());
 			it++;
 			it2++;
 			goto start;
 		}
-		case CmdList::STOPMUSIC:
+		case CommandEnum::STOPMUSIC:
 			mMusic.stop();
 			it++;
 			it2++;
 			goto start;
-		case CmdList::PLAYSOUND:
+		case CommandEnum::PLAYSOUND:
 		{
-			std::string t = settings.gamePath + settings.soundPath + list[it].content;
+			std::string t = settings.soundPath + mCommandList[it].content;
 			mSound.play(t.c_str());
 			it++;
 			it2++;
 			goto start;
 		}
-		case CmdList::STOPSOUND:
+		case CommandEnum::STOPSOUND:
 			mSound.stop();
 			it++;
 			it2++;
 			goto start;
-		case CmdList::CHANGEBOX:
-			mDialogueBox.SetBox(settings.gamePath + settings.imagePath + list[it].content);
+		case CommandEnum::CHANGEBOX:
+			mDialogueBox.SetBox(settings.imagePath + mCommandList[it].content);
 			it++;
 			it2++;
 			goto start;
-		case CmdList::PLAYAMBIENCE:
+		case CommandEnum::PLAYAMBIENCE:
 		{
-			std::string t = settings.gamePath + settings.soundPath + list[it].content;
+			std::string t = settings.soundPath + mCommandList[it].content;
 			mAmbience.play(t.c_str());
 			it++;
 			it2++;
 			goto start;
 		}
-		case CmdList::STOPAMBIENCE:
+		case CommandEnum::STOPAMBIENCE:
 			mAmbience.stop();
 			it++;
 			it2++;
 			goto start;
-		case CmdList::CHANGEESCMENU:
-			mMenu.ChangeImage(ESCImage, settings.gamePath + settings.imagePath + list[it].content);
+		case CommandEnum::CHANGEESCMENU:
+			mMenu.ChangeImage(ESCImage, settings.imagePath + mCommandList[it].content);
 			it++;
 			it2++;
 			goto start;
-		case CmdList::RETURNTOMENU:
+		case CommandEnum::RETURNTOMENU:
 			mDrawStartMenu = true;
 			mStartGame = false;
 			drawbuttons = true;
 			it = 0;
 			it2 = 0;
-			mMainScene.Load(settings.gamePath + settings.imagePath + "ui/bloodsplat_big.png");
+			mMainScene.Load(settings.imagePath + "ui/menu.png");
 			mMusic.play("game/sounds/music/Azimuth.ogg");
 			glfwSetMouseButtonCallback(mWindow, nullptr);
 			goto endsw;
@@ -712,58 +757,58 @@ namespace rb
 
 	void Application::text(std::string who, std::string what)
 	{
-		list.push_back({ CmdList::TEXT, " ", who, what, 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::TEXT, " ", who, what, 0.0f, 0.0f });
 	}
 	void Application::text(std::string what)
 	{
-		list.push_back({ CmdList::TEXT,  " ",  " ", what, 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::TEXT,  " ",  " ", what, 0.0f, 0.0f });
 	}
 	void Application::scene(std::string path, bool dissolve)
 	{
-		list.push_back({ CmdList::SCENE, path,  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::SCENE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::showSprite(std::string path, float x, float y)
 	{
-		list.push_back({ CmdList::SHOWSPRITE, path,  " ",  " ", x, y });
+		mCommandList.push_back({ CommandEnum::SHOWSPRITE, path,  " ",  " ", x, y });
 	}
 	void Application::hideSprite(std::string path)
 	{
-		list.push_back({ CmdList::HIDESPRITE, path,  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::HIDESPRITE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playMusic(std::string path)
 	{
-		list.push_back({ CmdList::PLAYMUSIC, path,  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::PLAYMUSIC, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopMusic()
 	{
-		list.push_back({ CmdList::STOPMUSIC,  " ",  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::STOPMUSIC,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playSound(std::string path)
 	{
-		list.push_back({ CmdList::PLAYSOUND, path,  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::PLAYSOUND, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopSound()
 	{
-		list.push_back({ CmdList::STOPSOUND,  " ",  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::STOPSOUND,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::playAmbience(std::string path)
 	{
-		list.push_back({ CmdList::PLAYAMBIENCE, path,  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::PLAYAMBIENCE, path,  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::stopAmbience()
 	{
-		list.push_back({ CmdList::STOPAMBIENCE,  " ",  " ",  " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::STOPAMBIENCE,  " ",  " ",  " ", 0.0f, 0.0f });
 	}
 	void Application::changeBox(std::string path)
 	{
-		list.push_back({ CmdList::CHANGEBOX, path, " ", " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::CHANGEBOX, path, " ", " ", 0.0f, 0.0f });
 	}
 	void Application::changeESCMenu(std::string path)
 	{
-		list.push_back({ CmdList::CHANGEESCMENU, path, " ", " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::CHANGEESCMENU, path, " ", " ", 0.0f, 0.0f });
 	}
 	void Application::returnToMenu()
 	{
-		list.push_back({ CmdList::RETURNTOMENU, " ", " ", " ", 0.0f, 0.0f });
+		mCommandList.push_back({ CommandEnum::RETURNTOMENU, " ", " ", " ", 0.0f, 0.0f });
 	}
 }

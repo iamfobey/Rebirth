@@ -8,8 +8,9 @@ class App : public rb::Application
 		window.Height = 900;
 		window.Title = "The last evening by candlelight";
 
-		settings.imagePath = "images/";
-		settings.fontPath = "fonts/Font.ttf";
+		settings.imagePath = settings.gamePath + "images/";
+		settings.fontPath = settings.gamePath + "fonts/Font.ttf";
+		settings.soundPath = settings.gamePath + "sounds/";
 	}
 
 	void Label() override
@@ -480,7 +481,7 @@ class App : public rb::Application
 		text("Шизука", "Нет, все хорошо, ты нашла второй ключ, можем и отдохнуть.");
 		text("Ишики", "Да, верно, давайте зайдем в ту комнату, где мы проснулись. Аяко, залезай на спину.");
 		text("Аяко", "Но...");
-		text("Ишики", "Никаких \"но\".");
+		text("Ишики", "Никаких \"но\"!");
 		text("Аяко залезла на спину и мы направились в начальную комнату.");
 
 		scene("bg/room1.jpg");
@@ -509,13 +510,9 @@ class App : public rb::Application
 		text("Ишики", "Надеюсь, что да.");
 
 		hideSprite("sprites/ayako_smile.png");
-		showSprite("sprites/ayako_normal.png");
-
-		text("Аяко погрустнела.");
-
-		hideSprite("sprites/ayako_normal.png");
 		showSprite("sprites/ayako_sad.png");
 
+		text("Аяко погрустнела.");
 		text("Аяко", "Я поняла… пойдем дальше.");
 		text("Ишики", "Хорошо.");
 
@@ -585,7 +582,7 @@ class App : public rb::Application
 		playMusic("music/Beginning.ogg");
 
 		text("Ишики", "Черт, кха… больно. И как же мне отсюда выбраться?");
-		text("Я начал ощупывать стены и нашел одну дверь, она была закрыта");
+		text("Я начал ощупывать стены и нашел одну дверь, она была закрыта.");
 		text("Ишики", "Должен же быть выход…");
 		text("Мысли", "ГДЕ! ГДЕ! ГДЕ ОН?!");
 		text("Кто-то открыл дверь.");
