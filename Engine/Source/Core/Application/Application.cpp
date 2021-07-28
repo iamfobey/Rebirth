@@ -200,8 +200,9 @@ namespace rb
 
 		if (mDrawStartMenu)
 		{
-			mMusic.play("game/sounds/music/Azimuth.ogg");
-			mMainScene.Load(settings.ImagesDir + "ui/menu.png");
+			std::string tempstr = settings.SoundsDir + settings.MenuMusicDir;
+			mMusic.play(tempstr.c_str());
+			mMainScene.Load(settings.ImagesDir + settings.MenuBackgroundDir);
 		}
 		else
 		{
