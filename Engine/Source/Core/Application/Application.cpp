@@ -1,3 +1,8 @@
+/*
+*  Thank you for staying with us.
+*  (c)Yume Games 2020 - 2021
+*/
+
 #include "Application.h"
 
 #include <glm/glm.hpp>
@@ -9,26 +14,26 @@
 #include <ImGui/imgui_impl_opengl3.h>
 
 const char* vTextShaderCode = { "#version 330 core\n"
-"layout(location = 0) in vec4 vertex;\n"
-"out vec2 TexCoords;\n"
-"uniform mat4 projection;\n"
-"void main()\n"
-"{\n"
-"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-"	TexCoords = vertex.zw;\n"
-"}\n"
+	"layout(location = 0) in vec4 vertex;\n"
+	"out vec2 TexCoords;\n"
+	"uniform mat4 projection;\n"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
+	"	TexCoords = vertex.zw;\n"
+	"}\n"
 };
 
 const char* fTextShaderCode = { "#version 330 core\n"
-"in vec2 TexCoords;\n"
-"out vec4 color;\n"
-"uniform sampler2D text;\n"
-"uniform vec3 textColor;\n"
-"void main()\n"
-"{\n"
-"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-"	color = vec4(textColor, 1.0) * sampled;\n"
-"}\n"
+	"in vec2 TexCoords;\n"
+	"out vec4 color;\n"
+	"uniform sampler2D text;\n"
+	"uniform vec3 textColor;\n"
+	"void main()\n"
+	"{\n"
+	"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
+	"	color = vec4(textColor, 1.0) * sampled;\n"
+	"}\n"
 };
 
 #include <fstream>
@@ -134,13 +139,13 @@ namespace rb
 
 	void Application::AppInit()
 	{
-		mLogger.Init(settings.gamePath);
+		mLogger.Init(settings.GameDir);
 		InitWindow();
 		mMainScene.Init();
-		mMenu.Init(settings.fontPath, window.Width, window.Height);
+		mMenu.Init(settings.FontDir, window.Width, window.Height);
 		mEscSprite.Init();
-		mEscSprite.Load(settings.imagePath + "ui/exitmenu.png");
-		mDialogueBox.Init(settings.imagePath + "ui/textbox_blood.png", settings.fontPath, window.Width, window.Height);
+		mEscSprite.Load(settings.ImagesDir + "ui/exitmenu.png");
+		mDialogueBox.Init(settings.ImagesDir + "ui/textbox_blood.png", settings.FontDir, window.Width, window.Height);
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -167,11 +172,8 @@ namespace rb
 			0x0400, 0x044F,
 			0,
 		};
-		std::string t = settings.fontPath;
-		io.Fonts->AddFontFromFileTTF(t.c_str(), 13.5f, &font_config, ranges);
+		io.Fonts->AddFontFromFileTTF(settings.FontDir.c_str(), 13.5f, &font_config, ranges);
 		io.IniFilename = nullptr;
-
-		mMainScene.Load(settings.imagePath + "ui/menu.png");
 
 		StartButton = mMenu.CreateTextButton();
 		LoadSaveButton = mMenu.CreateTextButton();
@@ -182,22 +184,32 @@ namespace rb
 		SaveSlotButton3 = mMenu.CreateTextButton();
 		SaveSlotButton4 = mMenu.CreateTextButton();
 		SaveSlotButton5 = mMenu.CreateTextButton();
-		ESCImage = mMenu.CreateImage(settings.imagePath + "ui/exitmenu.png");
+		ESCImage = mMenu.CreateImage(settings.ImagesDir + "ui/exitmenu.png");
 
 		mSound.SetVolume(0.25f);
 		mMusic.SetVolume(0.25f);
+
+		if (settings.MenuBackgroundDir == "NULL" || settings.MenuMusicDir == "NULL")
+			mDrawStartMenu = false;
 	}
 
 	void Application::AppRender()
 	{
+		int w = 1600, h = 900;
 		double xpos, ypos;
 
-		mMusic.play("game/sounds/music/Azimuth.ogg");
+		if (mDrawStartMenu)
+		{
+			mMusic.play("game/sounds/music/Azimuth.ogg");
+			mMainScene.Load(settings.ImagesDir + "ui/menu.png");
+		}
+		else
+		{
+			NextStatement();
+		}
 
 		while (!glfwWindowShouldClose(mWindow))
 		{
-			int w = 1600, h = 900;
-
 			glfwGetWindowSize(mWindow, &w, &h);
 
 			glViewport(0, 0, w, h);
@@ -319,7 +331,7 @@ namespace rb
 						mMainScene.Render();
 
 						if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth/2.125, WNDheight/1.59, mWindow)) {
-							if (LoadProgress(settings.gamePath, 1))
+							if (LoadProgress(settings.GameDir, 1))
 							{
 								mDrawStartMenu = false;
 								break;
@@ -327,7 +339,7 @@ namespace rb
 						}
 
 						if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.125, WNDheight /1.7, mWindow)) {
-							if (LoadProgress(settings.gamePath, 2))
+							if (LoadProgress(settings.GameDir, 2))
 							{
 								mDrawStartMenu = false;
 								break;
@@ -335,7 +347,7 @@ namespace rb
 						}
 
 						if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.125, WNDheight / 1.83, mWindow)) {
-							if (LoadProgress(settings.gamePath, 3))
+							if (LoadProgress(settings.GameDir, 3))
 							{
 								mDrawStartMenu = false;
 								break;
@@ -343,7 +355,7 @@ namespace rb
 						}
 
 						if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.125, WNDheight / 1.99, mWindow)) {
-							if (LoadProgress(settings.gamePath, 4))
+							if (LoadProgress(settings.GameDir, 4))
 							{
 								mDrawStartMenu = false;
 								break;
@@ -351,7 +363,7 @@ namespace rb
 						}
 
 						if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.125, WNDheight / 2.19, mWindow)) {
-							if (LoadProgress(settings.gamePath, 5))
+							if (LoadProgress(settings.GameDir, 5))
 							{
 								mDrawStartMenu = false;
 								break;
@@ -458,27 +470,27 @@ namespace rb
 			if (isLoadSave)
 			{
 				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth/ 2.12, WNDheight/1.64, mWindow)) {
-					if (LoadProgress(settings.gamePath, 1))
+					if (LoadProgress(settings.GameDir, 1))
 						RenderEscMenu = false;
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.12, WNDheight / 1.78, mWindow)) {
-					if (LoadProgress(settings.gamePath, 2))
+					if (LoadProgress(settings.GameDir, 2))
 						RenderEscMenu = false;
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.12, WNDheight / 1.96, mWindow)) {
-					if (LoadProgress(settings.gamePath, 3))
+					if (LoadProgress(settings.GameDir, 3))
 						RenderEscMenu = false;
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.12, WNDheight / 2.17, mWindow)) {
-					if (LoadProgress(settings.gamePath, 4))
+					if (LoadProgress(settings.GameDir, 4))
 						RenderEscMenu = false;
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.12, WNDheight / 2.41, mWindow)) {
-					if (LoadProgress(settings.gamePath, 5))
+					if (LoadProgress(settings.GameDir, 5))
 						RenderEscMenu = false;
 				}
 
@@ -489,23 +501,23 @@ namespace rb
 			else
 			{
 				if (mMenu.RenderTextButton(SaveSlotButton1, "Слот 1", WNDwidth / 2.12, WNDheight / 1.64, mWindow)) {
-					SaveProgress(settings.gamePath, 1);
+					SaveProgress(settings.GameDir, 1);
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton2, "Слот 2", WNDwidth / 2.12, WNDheight / 1.78, mWindow)) {
-					SaveProgress(settings.gamePath, 2);
+					SaveProgress(settings.GameDir, 2);
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton3, "Слот 3", WNDwidth / 2.12, WNDheight / 1.96, mWindow)) {
-					SaveProgress(settings.gamePath, 3);
+					SaveProgress(settings.GameDir, 3);
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton4, "Слот 4", WNDwidth / 2.12, WNDheight / 2.17, mWindow)) {
-					SaveProgress(settings.gamePath, 4);
+					SaveProgress(settings.GameDir, 4);
 				}
 
 				if (mMenu.RenderTextButton(SaveSlotButton5, "Слот 5", WNDwidth / 2.12, WNDheight / 2.41, mWindow)) {
-					SaveProgress(settings.gamePath, 5);
+					SaveProgress(settings.GameDir, 5);
 				}
 
 				if (mMenu.RenderTextButton(ReturnButton2, "Назад", WNDwidth / 2.11, WNDheight / 2.75, mWindow)) {
@@ -549,7 +561,7 @@ namespace rb
 					case CommandEnum::SCENE:
 						if (!t)
 						{
-							mMainScene.Load(settings.imagePath + mCommandList[temp].content);
+							mMainScene.Load(settings.ImagesDir + mCommandList[temp].content);
 							t = true;
 						}
 					case CommandEnum::SHOWSPRITE:
@@ -567,7 +579,7 @@ namespace rb
 									{
 										if (spritesToDelete[i] != spritesToDisplay[i + 1] && spritesToDelete[i] != spritesToDisplay[i + 2])
 										{
-											tempSprite.Load(settings.imagePath + mCommandList[temp].content);
+											tempSprite.Load(settings.ImagesDir + mCommandList[temp].content);
 											tempSprite.SetPosition(mCommandList[temp].posX, mCommandList[temp].poxY);
 											mSprites[mCommandList[temp].content] = tempSprite;
 										}
@@ -580,7 +592,7 @@ namespace rb
 							}
 							else
 							{
-								tempSprite.Load(settings.imagePath + mCommandList[temp].content);
+								tempSprite.Load(settings.ImagesDir + mCommandList[temp].content);
 								tempSprite.SetPosition(mCommandList[temp].posX, mCommandList[temp].poxY);
 								mSprites[mCommandList[temp].content] = tempSprite;
 							}
@@ -594,7 +606,7 @@ namespace rb
 						if (!soundStop)
 						{
 							mMusic.SoundEngine->stopAllSounds();
-							std::string t = settings.soundPath + mCommandList[temp].content;
+							std::string t = settings.SoundsDir + mCommandList[temp].content;
 							mMusic.play(t.c_str());
 						}
 						break;
@@ -605,17 +617,17 @@ namespace rb
 						soundStop = true;
 						break;
 					case CommandEnum::CHANGEBOX:
-						mDialogueBox.SetBox(settings.imagePath + mCommandList[temp].content);
+						mDialogueBox.SetBox(settings.ImagesDir + mCommandList[temp].content);
 						goto end;
 						break;
 					case CommandEnum::CHANGEESCMENU:
-						mMenu.ChangeImage(ESCImage, settings.imagePath + mCommandList[temp].content);
+						mMenu.ChangeImage(ESCImage, settings.ImagesDir + mCommandList[temp].content);
 						break;
 					case CommandEnum::PLAYAMBIENCE:
 						if (!ambStop)
 						{
 							mAmbience.SoundEngine->stopAllSounds();
-							std::string t = settings.soundPath + mCommandList[temp].content;
+							std::string t = settings.SoundsDir + mCommandList[temp].content;
 							mAmbience.play(t.c_str());
 						}
 						break;
@@ -657,7 +669,7 @@ namespace rb
 			}
 			break;
 		case CommandEnum::SCENE:
-			mMainScene.Load(settings.imagePath + mCommandList[it].content);
+			mMainScene.Load(settings.ImagesDir + mCommandList[it].content);
 			mSprites.clear();
 			it++;
 			it2++;
@@ -666,7 +678,7 @@ namespace rb
 		{
 			Sprite tempSprite;
 			tempSprite.Init();
-			tempSprite.Load(settings.imagePath + mCommandList[it].content);
+			tempSprite.Load(settings.ImagesDir + mCommandList[it].content);
 			tempSprite.SetPosition(mCommandList[it].posX, mCommandList[it].poxY);
 			mSprites[mCommandList[it].content] = tempSprite;
 			it++;
@@ -680,7 +692,7 @@ namespace rb
 			goto start;
 		case CommandEnum::PLAYMUSIC:
 		{
-			std::string t = settings.soundPath + mCommandList[it].content;
+			std::string t = settings.SoundsDir + mCommandList[it].content;
 			mMusic.play(t.c_str());
 			it++;
 			it2++;
@@ -693,7 +705,7 @@ namespace rb
 			goto start;
 		case CommandEnum::PLAYSOUND:
 		{
-			std::string t = settings.soundPath + mCommandList[it].content;
+			std::string t = settings.SoundsDir + mCommandList[it].content;
 			mSound.play(t.c_str());
 			it++;
 			it2++;
@@ -705,13 +717,13 @@ namespace rb
 			it2++;
 			goto start;
 		case CommandEnum::CHANGEBOX:
-			mDialogueBox.SetBox(settings.imagePath + mCommandList[it].content);
+			mDialogueBox.SetBox(settings.ImagesDir + mCommandList[it].content);
 			it++;
 			it2++;
 			goto start;
 		case CommandEnum::PLAYAMBIENCE:
 		{
-			std::string t = settings.soundPath + mCommandList[it].content;
+			std::string t = settings.SoundsDir + mCommandList[it].content;
 			mAmbience.play(t.c_str());
 			it++;
 			it2++;
@@ -723,7 +735,7 @@ namespace rb
 			it2++;
 			goto start;
 		case CommandEnum::CHANGEESCMENU:
-			mMenu.ChangeImage(ESCImage, settings.imagePath + mCommandList[it].content);
+			mMenu.ChangeImage(ESCImage, settings.ImagesDir + mCommandList[it].content);
 			it++;
 			it2++;
 			goto start;
@@ -733,7 +745,7 @@ namespace rb
 			drawbuttons = true;
 			it = 0;
 			it2 = 0;
-			mMainScene.Load(settings.imagePath + "ui/menu.png");
+			mMainScene.Load(settings.ImagesDir + "ui/menu.png");
 			mMusic.play("game/sounds/music/Azimuth.ogg");
 			glfwSetMouseButtonCallback(mWindow, nullptr);
 			goto endsw;

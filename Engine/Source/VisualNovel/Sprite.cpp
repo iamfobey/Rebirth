@@ -1,36 +1,41 @@
+/*
+*  Thank you for staying with us.
+*  (c)Yume Games 2020 - 2021
+*/
+
 #include "Sprite.h"
 
 #include <OpenGL/GLUtils.h>
 
 const char* vSpriteShaderCode = { "#version 330 core\n"
-		"layout(location = 0) in vec3 aPos;\n"
-		"layout(location = 2) in vec3 aColor;\n"
-		"layout(location = 2) in vec2 aTexCoord;\n"
-		"\n"
-		"out vec2 TexCoord;\n"
-		"out vec3 ourColor;\n"
-		"uniform mat4 view;\n"
-		"uniform mat4 proj;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = proj * view * vec4(aPos, 1.0);\n"
-		"	TexCoord = aTexCoord;\n"
-		"	ourColor = aColor;\n"
-		"}\n"
+	"layout(location = 0) in vec3 aPos;\n"
+	"layout(location = 2) in vec3 aColor;\n"
+	"layout(location = 2) in vec2 aTexCoord;\n"
+	"\n"
+	"out vec2 TexCoord;\n"
+	"out vec3 ourColor;\n"
+	"uniform mat4 view;\n"
+	"uniform mat4 proj;\n"
+	"\n"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = proj * view * vec4(aPos, 1.0);\n"
+	"	TexCoord = aTexCoord;\n"
+	"	ourColor = aColor;\n"
+	"}\n"
 };
 
 const char* fSpriteShaderCode = { "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"in vec2 TexCoord;\n"
-		"uniform sampler2D ourTexture;\n"
-		"void main()\n"
-		"{\n"
-		"	vec4 texColor = texture(ourTexture, TexCoord);\n"
-		"	if(texColor.a < 0.1)\n"
-		"		discard;\n"
-		"	FragColor = texColor;\n"
-		"}\n"
+	"out vec4 FragColor;\n"
+	"in vec2 TexCoord;\n"
+	"uniform sampler2D ourTexture;\n"
+	"void main()\n"
+	"{\n"
+	"	vec4 texColor = texture(ourTexture, TexCoord);\n"
+	"	if(texColor.a < 0.1)\n"
+	"		discard;\n"
+	"	FragColor = texColor;\n"
+	"}\n"
 };
 
 float spriteVertices[] = {
@@ -92,9 +97,6 @@ namespace rb
 
 		glBindTexture(GL_TEXTURE_2D, mSpriteTexture.GetID());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindVertexArray(0);
 	}
 
 	void Sprite::Load(std::string imagePath)

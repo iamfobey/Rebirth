@@ -1,3 +1,8 @@
+/*
+*  Thank you for staying with us.
+*  (c)Yume Games 2020 - 2021
+*/
+
 #pragma once
 
 #ifndef APPLICATION_H
@@ -68,10 +73,12 @@ static struct RenderContent
 
 static struct Setttings
 {
-	std::string gamePath = "game/";
-	std::string imagePath = gamePath + "images/";
-	std::string fontPath = gamePath + "fonts/";
-	std::string soundPath = gamePath + "sounds/";
+	std::string GameDir;
+	std::string ImagesDir;
+	std::string FontDir;
+	std::string SoundsDir;
+	std::string MenuBackgroundDir = "NULL";
+	std::string MenuMusicDir = "NULL";
 };
 
 namespace rb

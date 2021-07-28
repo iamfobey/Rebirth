@@ -1,34 +1,33 @@
+/*
+*  Thank you for staying with us.
+*  (c)Yume Games 2020 - 2021
+*/
+
 #include "Menu.h"
 
 const char* vvvTextShaderCode = {
-"#version 330 core\n"
-"layout(location = 0) in vec4 vertex;\n"
-"out vec2 TexCoords;\n"
-"uniform mat4 projection;\n"
-"void main()\n"
-"{\n"
-"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-"	TexCoords = vertex.zw;\n"
-"}\n"
+	"#version 330 core\n"
+	"layout(location = 0) in vec4 vertex;\n"
+	"out vec2 TexCoords;\n"
+	"uniform mat4 projection;\n"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
+	"	TexCoords = vertex.zw;\n"
+	"}\n"
 };
 
 const char* fffTextShaderCode = { "#version 330 core\n"
-"in vec2 TexCoords;\n"
-"out vec4 color;\n"
-"uniform sampler2D text;\n"
-"uniform vec3 textColor;\n"
-"void main()\n"
-"{\n"
-"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-"	color = vec4(textColor, 1.0) * sampled;\n"
-"}\n"
+	"in vec2 TexCoords;\n"
+	"out vec4 color;\n"
+	"uniform sampler2D text;\n"
+	"uniform vec3 textColor;\n"
+	"void main()\n"
+	"{\n"
+	"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
+	"	color = vec4(textColor, 1.0) * sampled;\n"
+	"}\n"
 };
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <OpenGL/GLUtils.h>
 
 const char* vImageShaderCode = { "#version 330 core\n"
 		"layout(location = 0) in vec3 aPos;\n"
@@ -37,15 +36,13 @@ const char* vImageShaderCode = { "#version 330 core\n"
 		"\n"
 		"out vec2 TexCoord;\n"
 		"out vec3 ourColor;\n"
-	//"uniform mat4 view;\n"
-	//"uniform mat4 proj;\n"
-	"\n"
-	"void main()\n"
-	"{\n"
-	"	gl_Position = vec4(aPos, 1.0);\n"
-	"	TexCoord = aTexCoord;\n"
-	"	ourColor = aColor;\n"
-	"}\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	gl_Position = vec4(aPos, 1.0);\n"
+		"	TexCoord = aTexCoord;\n"
+		"	ourColor = aColor;\n"
+		"}\n"
 };
 
 const char* fImageShaderCode = { "#version 330 core\n"
@@ -60,6 +57,14 @@ const char* fImageShaderCode = { "#version 330 core\n"
 		"	FragColor = texColor;\n"
 		"}\n"
 };
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <OpenGL/GLUtils.h>
+
+
 
 extern int WNDwidth, WNDheight;
 
