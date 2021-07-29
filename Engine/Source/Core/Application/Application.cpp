@@ -1,6 +1,6 @@
 /*
 *  Thank you for staying with us.
-*  (c)Yume Games 2020 - 2021
+*  (c) Yume Games 2020 - 2021
 */
 
 #include "Application.h"
@@ -209,6 +209,8 @@ namespace rb
 			NextStatement();
 		}
 
+		glfwSetKeyCallback(mWindow, key_callback);
+
 		while (!glfwWindowShouldClose(mWindow))
 		{
 			glfwGetWindowSize(mWindow, &w, &h);
@@ -235,10 +237,13 @@ namespace rb
 
 				if (!mMainScene.mDissolve && !mMainScene.mIsStart)
 				{
-					mSpriteIt = mSprites.begin();
-					for (; mSpriteIt != mSprites.end(); mSpriteIt++)
+					if (!mSprites.empty())
 					{
-						mSpriteIt->second.Render();
+						mSpriteIt = mSprites.begin();
+						for (; mSpriteIt != mSprites.end(); mSpriteIt++)
+						{
+							mSpriteIt->second.Render();
+						}
 					}
 
 					mDialogueBox.Render(mRenderContent.name, mRenderContent.text);
@@ -247,45 +252,45 @@ namespace rb
 					{
 						NextStatement();
 					}
+
+					if (RenderEscMenu)
+					{
+						glfwSetMouseButtonCallback(mWindow, nullptr);
+						RenderEscapeMenu();
+					}
+					else
+					{
+						glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
+							{
+								if (action == GLFW_PRESS & button == GLFW_MOUSE_BUTTON_LEFT)
+								{
+									NextState = true;
+								}
+							});
+					}
+
+					if (DebugInfo)
+					{
+						ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+						ImGui_ImplOpenGL3_NewFrame();
+						ImGui_ImplGlfw_NewFrame();
+						ImGui::NewFrame();
+
+						if (ImGui::Begin("Debug Info"))
+						{
+							ImGui::Text("FPS: %.f", io.Framerate);
+							ImGui::Text("Iterator: %i", it);
+
+							ImGui::End();
+						}
+
+						ImGui::Render();
+						ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+					}
 				}
 
 				mMenu.SetMousePos(xpos, ypos);
-
-				if (RenderEscMenu)
-				{
-					glfwSetMouseButtonCallback(mWindow, nullptr);
-					RenderEscapeMenu();
-				}
-				else
-				{
-					glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
-						{
-							if (action == GLFW_PRESS & button == GLFW_MOUSE_BUTTON_LEFT)
-							{
-								NextState = true;
-							}
-						});
-				}
-			}
-
-			if (DebugInfo)
-			{
-				ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-				ImGui_ImplOpenGL3_NewFrame();
-				ImGui_ImplGlfw_NewFrame();
-				ImGui::NewFrame();
-
-				if (ImGui::Begin("Debug Info"))
-				{
-					ImGui::Text("FPS: %.f", io.Framerate);
-					ImGui::Text("Iterator: %i", it);
-
-					ImGui::End();
-				}
-
-				ImGui::Render();
-				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			}
 
 			glfwPollEvents();

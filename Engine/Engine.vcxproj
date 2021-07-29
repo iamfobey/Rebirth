@@ -111,6 +111,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\;</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,6 +138,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\;</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
