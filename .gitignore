@@ -6,3 +6,4 @@ Engine/game/
 Engine/credits.txt
 *.vcxproj.filters
 *.vcxproj.user
+SandBox/*.cfg
