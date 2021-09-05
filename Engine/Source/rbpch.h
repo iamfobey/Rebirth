@@ -24,5 +24,3 @@
 #endif
 
 #include <Platform/DetectPlatform.h>
-
-#include <spdlog/spdlog.h>
