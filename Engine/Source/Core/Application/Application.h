@@ -22,8 +22,6 @@
 #include <VisualNovel/Menu.h>
 #include <VisualNovel/Ambience.h>
 
-#include <OpenGL/GLUtils.h>
-
 #include <Core/Debug/Logger.h>
 
 #include <glad/glad.h>
@@ -86,6 +84,8 @@ namespace rb
 	class Application
 	{
 	public:
+		Application();
+		~Application();
 		void Run();
 	protected:
 		WindowProps window;
@@ -132,6 +132,7 @@ namespace rb
 
 		std::map<std::string, Sprite> mSprites;
 		std::map<std::string, Sprite>::iterator mSpriteIt;
+		std::map<std::string, uint32_t> mConfigs;
 
 		Scene mMainScene;
 		DialogueBox mDialogueBox;

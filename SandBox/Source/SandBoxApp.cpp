@@ -20,6 +20,7 @@ void SandBoxApp::Init()
 void SandBoxApp::Label()
 {
 	scene("bg/park.png");
+	playMusic("music/OneFineDay.ogg");
 	text("Hello World!");
 	text("Test");
 	text("s");

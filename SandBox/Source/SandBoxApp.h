@@ -5,7 +5,6 @@
 
 #pragma once
 
-#pragma comment (lib, "Rebirth.lib")
 #include <Rebirth.h>
 
 #ifndef SANDBOXAPP_H

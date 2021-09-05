@@ -13,6 +13,8 @@
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
 
+#include <Core/ConfigParser/ConfigParser.h>
+
 const char* vTextShaderCode = { "#version 330 core\n"
 	"layout(location = 0) in vec4 vertex;\n"
 	"out vec2 TexCoords;\n"
@@ -51,11 +53,11 @@ extern int WNDwidth, WNDheight;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	switch (key)
+	if (action == GLFW_PRESS)
 	{
-	case GLFW_KEY_ESCAPE:
-		if (action == GLFW_PRESS)
+		switch (key)
 		{
+		case GLFW_KEY_ESCAPE:
 			if (RenderEscMenu)
 			{
 				RenderEscMenu = false;
@@ -66,18 +68,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 				RenderEscMenu = true;
 				break;
 			}
-		}
-		renderButtons = true;
-		break;
-	case GLFW_KEY_SPACE:
-		if (action == GLFW_PRESS)
-		{
+			renderButtons = true;
+			break;
+		case GLFW_KEY_SPACE:
 			NextState = true;
 			break;
-		}
-	case GLFW_KEY_D:
-		if (action == GLFW_PRESS)
-		{
+		case GLFW_KEY_D:
 			if (DebugInfo)
 			{
 				DebugInfo = false;
@@ -88,10 +84,23 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 				DebugInfo = true;
 				break;
 			}
+		case GLFW_KEY_RIGHT_ALT:
+			if (it <= 0 || it2 <= 0)
+			{
+				break;
+			}
+			else
+			{
+				it -= 2;
+				it2 -= 2;
+				NextState = true;
+				break;
+			}
+		default:
+			break;
 		}
-	default:
-		break;
 	}
+	
 }
 
 static bool SaveProgress(std::string path, int slot)
@@ -137,6 +146,45 @@ namespace rb
 		AppClose();
 	}
 
+	Application::Application()
+	{
+		ConfigParser cfgParser;
+		std::string configs = cfgParser.GetConfigs();
+		std::string temp = configs;
+		std::string line = configs;
+
+		std::vector<std::string> cfgList;
+
+		line.erase(line.find("\n"), line.find("\0") + line.size());
+		cfgList.push_back(line);
+
+		for (size_t i = 0; i < 1; i++)
+		{
+			temp.erase(0, line.size() + 1);
+			temp.erase(temp.find("\n"), temp.find("\0") + temp.size());
+			cfgList.push_back(temp);
+			line += "\n";
+			line += temp;
+
+			temp = configs;
+		}
+
+		for (auto cfg : cfgList)
+		{
+			temp = cfg;
+			cfg.erase(0, cfg.find("=") + 1);
+			temp.erase(temp.find("="), temp.find("=") + cfg.size());
+
+			mConfigs[temp] = atoi(cfg.c_str());
+
+			std::cout << temp << "=" << cfg << '\n';
+		}
+	}
+
+	Application::~Application()
+	{
+	}
+
 	void Application::AppInit()
 	{
 		mLogger.Init(settings.GameDir);
@@ -147,15 +195,15 @@ namespace rb
 		mEscSprite.Load(settings.ImagesDir + "ui/exitmenu.png");
 		mDialogueBox.Init(settings.ImagesDir + "ui/textbox_blood.png", settings.FontDir, window.Width, window.Height);
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-
 		mDialogueBox.namePosX = 170.0f;
 		mDialogueBox.namePosY = 227.0f;
 
 		mDialogueBox.textPosX = 167.0f;
 		mDialogueBox.textPosY = 192.0f;
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
@@ -186,8 +234,10 @@ namespace rb
 		SaveSlotButton5 = mMenu.CreateTextButton();
 		ESCImage = mMenu.CreateImage(settings.ImagesDir + "ui/exitmenu.png");
 
-		mSound.SetVolume(0.25f);
-		mMusic.SetVolume(0.25f);
+		std::cout << static_cast<float>(mConfigs["MUSIC_VOLUME"]) / 100 << std::endl;
+
+		mSound.SetVolume(static_cast<float>(mConfigs["SOUND_VOLUME"]) / 100);
+		mMusic.SetVolume(static_cast<float>(mConfigs["MUSIC_VOLUME"]) / 100);
 
 		if (settings.MenuBackgroundDir == "NULL" || settings.MenuMusicDir == "NULL")
 			mDrawStartMenu = false;
@@ -197,6 +247,8 @@ namespace rb
 	{
 		int w = 1600, h = 900;
 		double xpos, ypos;
+
+		glfwSwapInterval(-2);
 
 		if (mDrawStartMenu)
 		{
@@ -213,15 +265,15 @@ namespace rb
 
 		while (!glfwWindowShouldClose(mWindow))
 		{
-			glfwGetWindowSize(mWindow, &w, &h);
+			glClear(GL_COLOR_BUFFER_BIT);
 
-			glViewport(0, 0, w, h);
+			glfwGetWindowSize(mWindow, &w, &h);
+			glfwGetCursorPos(mWindow, &xpos, &ypos);
 
 			WNDwidth = w;
 			WNDheight = h;
 
-			glClear(GL_COLOR_BUFFER_BIT);
-			glfwGetCursorPos(mWindow, &xpos, &ypos);
+			glViewport(0, 0, w, h);
 
 			mMusic.update();
 
@@ -267,26 +319,6 @@ namespace rb
 									NextState = true;
 								}
 							});
-					}
-
-					if (DebugInfo)
-					{
-						ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-						ImGui_ImplOpenGL3_NewFrame();
-						ImGui_ImplGlfw_NewFrame();
-						ImGui::NewFrame();
-
-						if (ImGui::Begin("Debug Info"))
-						{
-							ImGui::Text("FPS: %.f", io.Framerate);
-							ImGui::Text("Iterator: %i", it);
-
-							ImGui::End();
-						}
-
-						ImGui::Render();
-						ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 					}
 				}
 
@@ -540,7 +572,7 @@ namespace rb
 			if (it2 != it)
 			{
 				mSprites.clear();
-				int temp = it;
+				unsigned int temp = it;
 				bool text = true;
 				std::vector<std::string> spritesToDelete;
 				std::vector<std::string> spritesToDisplay;
@@ -549,7 +581,7 @@ namespace rb
 				IsLoadSave = false;
 				temp--;
 				bool t = false;
-				int tit = 0;
+				unsigned int tit = 0;
 				while (true)
 				{
 					if (temp < 0)
@@ -767,10 +799,6 @@ namespace rb
 	{
 		WindowsWindow tempWindow(&window);
 		mWindow = tempWindow.GetWindow();
-	}
-
-	void Application::AppInput()
-	{
 	}
 
 	void Application::text(std::string who, std::string what)
