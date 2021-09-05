@@ -5,66 +5,9 @@
 
 #include "Menu.h"
 
-const char* vvvTextShaderCode = {
-	"#version 330 core\n"
-	"layout(location = 0) in vec4 vertex;\n"
-	"out vec2 TexCoords;\n"
-	"uniform mat4 projection;\n"
-	"void main()\n"
-	"{\n"
-	"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-	"	TexCoords = vertex.zw;\n"
-	"}\n"
-};
-
-const char* fffTextShaderCode = { "#version 330 core\n"
-	"in vec2 TexCoords;\n"
-	"out vec4 color;\n"
-	"uniform sampler2D text;\n"
-	"uniform vec3 textColor;\n"
-	"void main()\n"
-	"{\n"
-	"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-	"	color = vec4(textColor, 1.0) * sampled;\n"
-	"}\n"
-};
-
-const char* vImageShaderCode = { "#version 330 core\n"
-		"layout(location = 0) in vec3 aPos;\n"
-		"layout(location = 2) in vec3 aColor;\n"
-		"layout(location = 2) in vec2 aTexCoord;\n"
-		"\n"
-		"out vec2 TexCoord;\n"
-		"out vec3 ourColor;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = vec4(aPos, 1.0);\n"
-		"	TexCoord = aTexCoord;\n"
-		"	ourColor = aColor;\n"
-		"}\n"
-};
-
-const char* fImageShaderCode = { "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"in vec2 TexCoord;\n"
-		"uniform sampler2D ourTexture;\n"
-		"void main()\n"
-		"{\n"
-		"	vec4 texColor = texture(ourTexture, TexCoord);\n"
-		"	if(texColor.a < 0.1)\n"
-		"		discard;\n"
-		"	FragColor = texColor;\n"
-		"}\n"
-};
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <OpenGL/GLUtils.h>
-
-
 
 extern int WNDwidth, WNDheight;
 
@@ -72,6 +15,30 @@ namespace rb
 {
 	void Menu::Init(std::string fontPath, int width, int height)
 	{
+		const char* vvvTextShaderCode = {
+			"#version 330 core\n"
+			"layout(location = 0) in vec4 vertex;\n"
+			"out vec2 TexCoords;\n"
+			"uniform mat4 projection;\n"
+			"void main()\n"
+			"{\n"
+			"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
+			"	TexCoords = vertex.zw;\n"
+			"}\n"
+		};
+
+		const char* fffTextShaderCode = { "#version 330 core\n"
+			"in vec2 TexCoords;\n"
+			"out vec4 color;\n"
+			"uniform sampler2D text;\n"
+			"uniform vec3 textColor;\n"
+			"void main()\n"
+			"{\n"
+			"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
+			"	color = vec4(textColor, 1.0) * sampled;\n"
+			"}\n"
+		};
+
 		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WNDwidth), 0.0f, static_cast<float>(WNDheight));
 
 		mTextShader.load(vvvTextShaderCode, fffTextShaderCode);
@@ -128,6 +95,35 @@ namespace rb
 
 	int Menu::CreateImage(std::string path)
 	{
+		const char* vImageShaderCode = { "#version 330 core\n"
+				"layout(location = 0) in vec3 aPos;\n"
+				"layout(location = 2) in vec3 aColor;\n"
+				"layout(location = 2) in vec2 aTexCoord;\n"
+				"\n"
+				"out vec2 TexCoord;\n"
+				"out vec3 ourColor;\n"
+				"\n"
+				"void main()\n"
+				"{\n"
+				"	gl_Position = vec4(aPos, 1.0);\n"
+				"	TexCoord = aTexCoord;\n"
+				"	ourColor = aColor;\n"
+				"}\n"
+		};
+
+		const char* fImageShaderCode = { "#version 330 core\n"
+				"out vec4 FragColor;\n"
+				"in vec2 TexCoord;\n"
+				"uniform sampler2D ourTexture;\n"
+				"void main()\n"
+				"{\n"
+				"	vec4 texColor = texture(ourTexture, TexCoord);\n"
+				"	if(texColor.a < 0.1)\n"
+				"		discard;\n"
+				"	FragColor = texColor;\n"
+				"}\n"
+		};
+
 		Shader s;
 		s.load(vImageShaderCode, fImageShaderCode);
 		mImageShaderList.push_back(s);

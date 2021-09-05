@@ -5,42 +5,42 @@
 
 #include "DialogueBox.h"
 
-const char* vBoxShaderCode = { "#version 330 core\n"
-	"layout(location = 0) in vec3 aPos;\n"
-	"layout(location = 1) in vec3 aColor;\n"
-	"layout(location = 2) in vec2 aTexCoord;\n"
-	"\n"
-	"out vec2 TexCoord;\n"
-	"out vec3 ourColor;\n"
-	"\n"
-	"void main()\n"
-	"{\n"
-	"	gl_Position = vec4(aPos, 1.0);\n"
-	"	TexCoord = aTexCoord;\n"
-	"	ourColor = aColor;\n"
-	"}\n"
-};
-
-const char* fBoxShaderCode = { "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"in vec2 TexCoord;\n"
-	"\n"
-	"uniform sampler2D ourTexture;\n"
-	"uniform float alpha = 0.0;\n"
-	"\n"
-	"void main()\n"
-	"{\n"
-	"	vec4 texColor = texture(ourTexture, TexCoord);\n"
-	"	if(texColor.a < 0.1)\n"
-	"		discard;\n"
-	"	FragColor = texColor;\n"
-	"}\n"
-};
-
 namespace rb
 {
 	void DialogueBox::Init(std::string boxPath, std::string fontPath, int width, int height)
 	{
+		const char* vBoxShaderCode = { "#version 330 core\n"
+			"layout(location = 0) in vec3 aPos;\n"
+			"layout(location = 1) in vec3 aColor;\n"
+			"layout(location = 2) in vec2 aTexCoord;\n"
+			"\n"
+			"out vec2 TexCoord;\n"
+			"out vec3 ourColor;\n"
+			"\n"
+			"void main()\n"
+			"{\n"
+			"	gl_Position = vec4(aPos, 1.0);\n"
+			"	TexCoord = aTexCoord;\n"
+			"	ourColor = aColor;\n"
+			"}\n"
+		};
+
+		const char* fBoxShaderCode = { "#version 330 core\n"
+			"out vec4 FragColor;\n"
+			"in vec2 TexCoord;\n"
+			"\n"
+			"uniform sampler2D ourTexture;\n"
+			"uniform float alpha = 0.0;\n"
+			"\n"
+			"void main()\n"
+			"{\n"
+			"	vec4 texColor = texture(ourTexture, TexCoord);\n"
+			"	if(texColor.a < 0.1)\n"
+			"		discard;\n"
+			"	FragColor = texColor;\n"
+			"}\n"
+		};
+
 		mBoxShader.load(vBoxShaderCode, fBoxShaderCode);
 		mBoxTexture.Load(boxPath);
 		mNameText.Init(fontPath, width, height, 32);
@@ -89,8 +89,8 @@ namespace rb
 		glBindTexture(GL_TEXTURE_2D, mBoxTexture.GetID());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		glBindVertexArray(0);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		/*glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D, 0);*/
 
 		mNameText.Render(name, -1, -1, namePosX, namePosY, 1.0, glm::vec3(1.0f, 0.1f, 0.0f));
 		mText.Render(text, mBoxTexture.width, mBoxTexture.height, textPosX, textPosY);

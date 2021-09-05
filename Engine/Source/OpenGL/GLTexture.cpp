@@ -5,6 +5,8 @@
 
 #include "GLTexture.h"
 
+#include <spdlog/spdlog.h>
+
 unsigned int loadTexture(std::string path, int* width, int* height)
 {
 	unsigned int texture;

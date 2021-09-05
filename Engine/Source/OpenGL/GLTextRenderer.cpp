@@ -7,6 +7,8 @@
 
 extern int WNDwidth, WNDheight;
 
+#include <spdlog/spdlog.h>
+
 namespace rb
 {
 	void TextRenderer::Init(unsigned int* VAO, unsigned int* VBO, std::string fontPath, unsigned int size)

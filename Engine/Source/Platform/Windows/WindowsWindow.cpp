@@ -36,6 +36,7 @@ namespace rb
 			throw std::runtime_error("Failed to create GLFW window!");
 
 		glfwMakeContextCurrent(m_Window);
+		glfwSwapInterval(-2);
 		
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 			throw std::runtime_error("Failed to init GLAD!");
@@ -48,18 +49,18 @@ namespace rb
 			glViewport(0, 0, width, height);
 			});
 
-		glfwSwapInterval(1);
+		glfwSwapInterval(-2);
 
-		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
+		/*glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
 			if (focused)
 			{
-				glfwSwapInterval(1);
+				glfwSwapInterval(-2);
 			}
 			else
 			{
 				glfwSwapInterval(-5);
 			}
-			});
+			});*/
 
 		GLFWimage images[1];
 		images[0].pixels = stbi_load("game/images/misc/icon.png", &images[0].width, &images[0].height, 0, 4);

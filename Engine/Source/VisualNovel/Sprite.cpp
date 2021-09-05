@@ -5,8 +5,6 @@
 
 #include "Sprite.h"
 
-#include <OpenGL/GLUtils.h>
-
 const char* vSpriteShaderCode = { "#version 330 core\n"
 	"layout(location = 0) in vec3 aPos;\n"
 	"layout(location = 2) in vec3 aColor;\n"
@@ -86,9 +84,8 @@ namespace rb
 	void Sprite::Render()
 	{
 		mSpriteShader.use();
-		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(45.0f), (float)WNDwidth / (float)WNDheight, 0.1f, 100.0f);
-		
+		projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)WNDwidth / (float)WNDheight, 0.1f, 100.0f);		
 
 		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "proj"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(mSpriteShader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
