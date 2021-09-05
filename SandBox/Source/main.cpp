@@ -7,21 +7,22 @@
 
 int main()
 {
+	SandBoxApp* app = new SandBoxApp;
 	try
 	{
-		SandBoxApp* app = new SandBoxApp;
-
 		app->Run();
-
-		delete app;
 	}
 	catch (const std::exception& ex)
 	{
 		std::cerr << ex.what() << '\n';
 		spdlog::get("log")->error(ex.what());
 
+		delete app;
+
 		return EXIT_FAILURE;
 	}
+
+	delete app;
 
 	return EXIT_SUCCESS;
 }
