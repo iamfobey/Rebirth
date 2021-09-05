@@ -190,10 +190,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\ConfigParser\ConfigParser.cpp" />
+    <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\VisualNovel\Ambience.cpp" />
     <ClCompile Include="Source\VisualNovel\Menu.cpp" />
     <ClCompile Include="Source\VisualNovel\Music.cpp" />
-    <ClCompile Include="Source\OpenGL\GLUtils.cpp" />
     <ClCompile Include="Source\OpenGL\GLTexture.cpp" />
     <ClCompile Include="Source\VisualNovel\DialogueBox.cpp" />
     <ClCompile Include="Source\VisualNovel\Scene.cpp" />
@@ -347,10 +348,10 @@
     <ClCompile Include="Source\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Core\ConfigParser\ConfigParser.h" />
     <ClInclude Include="Source\VisualNovel\Ambience.h" />
     <ClInclude Include="Source\VisualNovel\Menu.h" />
     <ClInclude Include="Source\VisualNovel\Music.h" />
-    <ClInclude Include="Source\OpenGL\GLUtils.h" />
     <ClInclude Include="Source\OpenGL\GLTexture.h" />
     <ClInclude Include="Source\VisualNovel\DialogueBox.h" />
     <ClInclude Include="Source\VisualNovel\Scene.h" />
