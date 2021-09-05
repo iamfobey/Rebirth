@@ -191,7 +191,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\ConfigParser\ConfigParser.cpp" />
-    <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\VisualNovel\Ambience.cpp" />
     <ClCompile Include="Source\VisualNovel\Menu.cpp" />
     <ClCompile Include="Source\VisualNovel\Music.cpp" />
