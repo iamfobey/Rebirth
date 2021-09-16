@@ -9,33 +9,33 @@ namespace rb
 {
 	void Scene::Init()
 	{
-		const char* vSceneShaderCode = { "#version 330 core\n"
-			"layout(location = 0) in vec3 aPos;\n"
-			"layout(location = 1) in vec3 aColor;\n"
-			"layout(location = 2) in vec2 aTexCoord;\n"
-			"out vec3 ourColor;\n"
-			"out vec2 TexCoord;\n"
-			"void main()\n"
-			"{\n"
-			 "	gl_Position = vec4(aPos, 1.0);\n"
-			 "	ourColor = aColor;\n"
-			 "	TexCoord = aTexCoord;\n"
-			"}\n"
-		};
+		const char* SceneVertexShader = R"(
+			#version 330 core
+			layout(location = 0) in vec3 aPos;
+			layout(location = 1) in vec3 aColor;
+			layout(location = 2) in vec2 aTexCoord;
+			out vec3 ourColor;
+			out vec2 TexCoord;
+			void main()
+			{
+				gl_Position = vec4(aPos, 1.0);
+				ourColor = aColor;
+				TexCoord = aTexCoord;
+			}
+		)";
 
-		const char* fSceneShaderCode = { "#version 330 core\n"
-			"out vec4 FragColor;\n"
-			"in vec3 ourColor;\n"
-			"in vec2 TexCoord;\n"
-			"\n"
-			"uniform sampler2D ourTexture;\n"
-			"uniform float alpha = 0.0;\n"
-			"\n"
-			"void main()\n"
-			"{\n"
-			"	FragColor = vec4(vec3(texture(ourTexture, TexCoord)), alpha);\n"
-			"}\n"
-		};
+		const char* SceneFragmentShader = R"(
+			#version 330 core
+			out vec4 FragColor;
+			in vec3 ourColor;
+			in vec2 TexCoord;
+			uniform sampler2D ourTexture;
+			uniform float alpha = 0.0;
+			void main()
+			{
+				FragColor = vec4(vec3(texture(ourTexture, TexCoord)), alpha);
+			}
+		)";
 
 		float vertices[] = {
 			   -1.0f, -1.0f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
@@ -49,7 +49,7 @@ namespace rb
 						2, 3, 0
 		};
 
-		mSceneShader.load(vSceneShaderCode, fSceneShaderCode);
+		mSceneShader.load(SceneVertexShader, SceneFragmentShader);
 
 		glGenVertexArrays(1, &mVAO);
 		glGenBuffers(1, &mVBO);
