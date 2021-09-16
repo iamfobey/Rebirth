@@ -1,6 +1,6 @@
 /*
 *  Thank you for staying with us.
-*  (c) Yume Games 2020 - 2021
+*  (c) Oneiro Games 2019 - 2021
 */
 
 #include "Menu.h"

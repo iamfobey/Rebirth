@@ -1,6 +1,6 @@
 /*
 *  Thank you for staying with us.
-*  (c) Yume Games 2020 - 2021
+*  (c) Oneiro Games 2019 - 2021
 */
 
 #include "Application.h"
@@ -40,18 +40,19 @@ const char* fTextShaderCode = { "#version 330 core\n"
 
 #include <fstream>
 
-static unsigned int it = 0;
-static unsigned int it2 = 0;
+unsigned int it = 0;
+unsigned int it2 = 0;
 
-static bool IsLoadSave = false;
-static bool NextState = false;
-static bool RenderEscMenu = false;
-static bool renderButtons = true;
-static bool DebugInfo = false;
+bool IsLoadSave = false;
+bool NextState = false;
+bool RenderEscMenu = false;
+bool renderButtons = true;
+bool DebugInfo = false;
+bool Rewind = false;
 
 extern int WNDwidth, WNDheight;
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
@@ -93,7 +94,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 			{
 				it -= 2;
 				it2 -= 2;
-				NextState = true;
 				break;
 			}
 		default:
@@ -103,7 +103,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	
 }
 
-static bool SaveProgress(std::string path, int slot)
+bool SaveProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios_base::out | std::ios_base::trunc);
 
@@ -117,7 +117,7 @@ static bool SaveProgress(std::string path, int slot)
 	return true;
 }
 
-static bool LoadProgress(std::string path, int slot)
+bool LoadProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios::in);
 
