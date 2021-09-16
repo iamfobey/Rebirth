@@ -1,6 +1,6 @@
 /*
 *  Thank you for staying with us.
-*  (c) Yume Games 2020 - 2021
+*  (c) Oneiro Games 2019 - 2021
 */
 
 #include "Application.h"
@@ -15,43 +15,21 @@
 
 #include <Core/ConfigParser/ConfigParser.h>
 
-const char* vTextShaderCode = { "#version 330 core\n"
-	"layout(location = 0) in vec4 vertex;\n"
-	"out vec2 TexCoords;\n"
-	"uniform mat4 projection;\n"
-	"void main()\n"
-	"{\n"
-	"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-	"	TexCoords = vertex.zw;\n"
-	"}\n"
-};
-
-const char* fTextShaderCode = { "#version 330 core\n"
-	"in vec2 TexCoords;\n"
-	"out vec4 color;\n"
-	"uniform sampler2D text;\n"
-	"uniform vec3 textColor;\n"
-	"void main()\n"
-	"{\n"
-	"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-	"	color = vec4(textColor, 1.0) * sampled;\n"
-	"}\n"
-};
-
 #include <fstream>
 
-static unsigned int it = 0;
-static unsigned int it2 = 0;
+unsigned int it = 0;
+unsigned int it2 = 0;
 
-static bool IsLoadSave = false;
-static bool NextState = false;
-static bool RenderEscMenu = false;
-static bool renderButtons = true;
-static bool DebugInfo = false;
+bool IsLoadSave = false;
+bool NextState = false;
+bool RenderEscMenu = false;
+bool renderButtons = true;
+bool DebugInfo = false;
+bool Rewind = false;
 
 extern int WNDwidth, WNDheight;
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
@@ -93,7 +71,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 			{
 				it -= 2;
 				it2 -= 2;
-				NextState = true;
 				break;
 			}
 		default:
@@ -103,7 +80,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	
 }
 
-static bool SaveProgress(std::string path, int slot)
+bool SaveProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios_base::out | std::ios_base::trunc);
 
@@ -117,7 +94,7 @@ static bool SaveProgress(std::string path, int slot)
 	return true;
 }
 
-static bool LoadProgress(std::string path, int slot)
+bool LoadProgress(std::string path, int slot)
 {
 	std::fstream file(path + "save.data" + std::to_string(slot), std::ios::in);
 
@@ -581,7 +558,6 @@ namespace rb
 				IsLoadSave = false;
 				temp--;
 				bool t = false;
-				unsigned int tit = 0;
 				while (true)
 				{
 					if (temp < 0)

@@ -1,6 +1,6 @@
 /*
 *  Thank you for staying with us.
-*  (c) Yume Games 2020 - 2021
+*  (c) Oneiro Games 2019 - 2021
 */
 
 #include "DialogueBox.h"
@@ -40,6 +40,36 @@ namespace rb
 			"	FragColor = texColor;\n"
 			"}\n"
 		};
+
+		const char* BoxVertexShader = R"(
+			#version 330 core
+			layout(location = 0) in vec3 aPos;
+			layout(location = 1) in vec3 aColor;
+			layout(location = 2) in vec2 aTexCoord;
+			out vec2 TexCoord;
+			out vec3 ourColor;
+			void main()
+			{
+				gl_Position = vec4(aPos, 1.0);
+				TexCoord = aTexCoord;
+				ourColor = aColor;
+			}
+		)";
+
+		const char* BoxFragmentShader = R"(
+			#version 330 core
+			out vec4 FragColor;
+			in vec2 TexCoord;
+			uniform sampler2D ourTexture;
+			uniform float alpha = 0.0;
+			void main()
+			{
+				vec4 texColor = texture(ourTexture, TexCoord);
+				if(texColor.a < 0.1)
+					discard;
+				FragColor = texColor;
+			}
+		)";
 
 		mBoxShader.load(vBoxShaderCode, fBoxShaderCode);
 		mBoxTexture.Load(boxPath);
